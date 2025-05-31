@@ -54,6 +54,6 @@ export default defineConfig({
         '@/resources': resolve(__dirname, 'resources'),
       },
     },
-    plugins: [react(), tailwindcss()],
+    plugins: [tailwindcss(), react()],
   },
 })
