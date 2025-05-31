@@ -1,6 +1,10 @@
 @import 'tailwindcss';
+@import "tw-animate-css";
+
 @source '@/app';
 @source '@/lib';
+
+@variant dark (&:is(.dark *));
 
 @theme {
   --color-background: var(--background);
