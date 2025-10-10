@@ -4,6 +4,8 @@ import appIcon from '@/resources/build/icon.png?asset'
 import { registerResourcesProtocol } from './protocols'
 import { registerWindowHandlers } from '@/lib/conveyor/handlers/window-handler'
 import { registerAppHandlers } from '@/lib/conveyor/handlers/app-handler'
+import { registerUpdaterHandlers } from '@/lib/conveyor/handlers/updater-handler'
+import { updateManager } from './updater'
 
 export function createAppWindow(): void {
   // Register custom protocol for resources
@@ -30,6 +32,10 @@ export function createAppWindow(): void {
   // Register IPC events for the main window.
   registerWindowHandlers(mainWindow)
   registerAppHandlers(app)
+  registerUpdaterHandlers()
+
+  // Set the main window for the update manager
+  updateManager.setMainWindow(mainWindow)
 
   mainWindow.on('ready-to-show', () => {
     mainWindow.show()

@@ -1,6 +1,7 @@
 import { app, BrowserWindow } from 'electron'
 import { electronApp, optimizer } from '@electron-toolkit/utils'
 import { createAppWindow } from './app'
+import { updateManager } from './updater'
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
@@ -10,6 +11,9 @@ app.whenReady().then(() => {
   electronApp.setAppUserModelId('com.electron')
   // Create app window
   createAppWindow()
+
+  // Initialize auto-updater
+  updateManager.initialize()
 
   // Default open or close DevTools by F12 in development
   // and ignore CommandOrControl + R in production.
@@ -32,6 +36,7 @@ app.whenReady().then(() => {
 // explicitly with Cmd + Q.
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
+    updateManager.cleanup()
     app.quit()
   }
 })

@@ -1,0 +1,84 @@
+name: Build and Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to release (e.g., 1.0.0)'
+        required: false
+        type: string
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Set version from input (if provided)
+        if: github.event_name == 'workflow_dispatch' && github.event.inputs.version != ''
+        run: npm version ${{ github.event.inputs.version }} --no-git-tag-version
+
+      - name: Build and publish to S3
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          S3_UPDATE_BUCKET: ${{ secrets.S3_UPDATE_BUCKET }}
+          S3_UPDATE_REGION: ${{ secrets.S3_UPDATE_REGION }}
+        run: npm run build:win
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: windows-build
+          path: dist/*.exe
+
+  build-mac:
+    runs-on: macos-latest
+    if: github.event_name == 'workflow_dispatch'  # Only build macOS on manual trigger
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Set version from input (if provided)
+        if: github.event.inputs.version != ''
+        run: npm version ${{ github.event.inputs.version }} --no-git-tag-version
+
+      - name: Build and publish to S3
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          S3_UPDATE_BUCKET: ${{ secrets.S3_UPDATE_BUCKET }}
+          S3_UPDATE_REGION: ${{ secrets.S3_UPDATE_REGION }}
+        run: npm run build:mac
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: mac-build
+          path: |
+            dist/*.dmg
+            dist/*.zip

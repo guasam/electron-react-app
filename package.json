@@ -20,9 +20,12 @@
     "electron:build:linux": "electron-builder --linux",
     "electron:build:dir": "electron-builder --dir",
     "build:unpack": "run-s vite:build:app electron:build:dir",
-    "build:win": "run-s vite:build:app electron:build:win",
-    "build:mac": "run-s vite:build:app electron:build:mac",
-    "build:linux": "run-s vite:build:app electron:build:linux"
+    "build:win": "run-s vite:build:app \"electron:build:win -- --publish always\"",
+    "build:mac": "run-s vite:build:app \"electron:build:mac -- --publish always\"",
+    "build:linux": "run-s vite:build:app \"electron:build:linux -- --publish always\"",
+    "build:win:local": "run-s vite:build:app electron:build:win",
+    "build:mac:local": "run-s vite:build:app electron:build:mac",
+    "build:linux:local": "run-s vite:build:app electron:build:linux"
   },
   "repository": {
     "type": "git",
@@ -41,9 +44,11 @@
     "@radix-ui/react-switch": "^1.2.6",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "electron-log": "^5.4.3",
     "lucide-react": "^0.541.0",
     "tailwind-merge": "^3.3.1",
     "tw-animate-css": "^1.3.7",
+    "update-electron-app": "^3.1.1",
     "zod": "^4.1.3"
   },
   "devDependencies": {

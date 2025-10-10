@@ -13,12 +13,17 @@ asarUnpack:
   - resources/**
 win:
   executableName: ElectronReactApp
+  target:
+    - nsis
 nsis:
   artifactName: ${name}-${version}-setup.${ext}
   shortcutName: ${productName}
   uninstallDisplayName: ${productName}
   createDesktopShortcut: always
 mac:
+  target:
+    - zip
+    - dmg
   entitlementsInherit: resources/build/entitlements.mac.plist
   extendInfo:
     - NSCameraUsageDescription: Application requests access to the device's camera.
@@ -39,5 +44,8 @@ appImage:
   artifactName: ${name}-${version}.${ext}
 npmRebuild: false
 publish:
-  provider: generic
-  url: https://example.com/auto-updates
+  provider: s3
+  bucket: apo-internal-updates  # Replace with your S3 bucket name
+  region: us-east-1            # Replace with your AWS region
+  path: /releases
+  acl: public-read
