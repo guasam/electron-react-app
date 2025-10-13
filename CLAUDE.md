@@ -189,3 +189,4 @@ await window.conveyor.app.version()
 - TailwindCSS 4.1.12
 - Shadcn UI
 - Zod 4.1.3 (runtime validation)
+- memo

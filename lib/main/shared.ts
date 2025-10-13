@@ -9,7 +9,7 @@ import { ipcSchemas, validateArgs, validateReturn, type ChannelArgs, type Channe
  */
 export const handle = <T extends keyof typeof ipcSchemas>(
   channel: T,
-  handler: (...args: ChannelArgs<T>) => ChannelReturn<T>
+  handler: (...args: ChannelArgs<T>) => ChannelReturn<T> | Promise<ChannelReturn<T>>
 ) => {
   ipcMain.handle(channel, async (_, ...args) => {
     try {

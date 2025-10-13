@@ -4,26 +4,27 @@
   --window-title-margin: 42px;
   --window-titlebar-height: 40px;
   --window-titlebar-font-size: 13px;
-  --window-scrollbar-width: 12px;
+  --window-scrollbar-width: 8px;
   --window-mac-titlebar-controls-margin: 80px;
-  --window-background-transition-duration: 0.3s;
+  --window-background-transition-duration: 0.15s;
   --window-c-popup-font-weight: normal;
 
-  --window-c-background: #1c1c1c;
-  --window-c-titlebar-background: #282828;
-  --window-c-titlebar-border: transparent;
-  --window-c-text: #ffffffc8;
-  --window-c-hover: #3c3c3c;
-  --window-c-popup-background: #282828;
-  --window-c-popup-border: #3c3c3c;
-  --window-c-popup-shadow: #00000080;
-  --window-c-separator: #80808033;
-  --window-c-control-hover: #0000003d;
+  /* Vercel-inspired dark theme colors */
+  --window-c-background: #000;
+  --window-c-titlebar-background: #000;
+  --window-c-titlebar-border: #262626;
+  --window-c-text: #fff;
+  --window-c-hover: #1a1a1a;
+  --window-c-popup-background: #0a0a0a;
+  --window-c-popup-border: #262626;
+  --window-c-popup-shadow: rgba(0, 0, 0, 0.5);
+  --window-c-separator: #262626;
+  --window-c-control-hover: rgba(255, 255, 255, 0.1);
   --window-c-control-close-hover: #c42b1c;
-  --window-c-scrollbar-track: #1e1e1ec6;
-  --window-c-scrollbar-thumb: #88888863;
+  --window-c-scrollbar-track: #0a0a0a;
+  --window-c-scrollbar-thumb: #333;
   --window-c-scrollbar-thumb-hover: #555;
-  --window-c-text-shadow: #000000a8;
+  --window-c-text-shadow: transparent;
 }
 
 :root:not(.dark) {
@@ -31,21 +32,22 @@
   --window-titlebar-font-weight: 500;
   --window-c-popup-font-weight: 500;
 
+  /* Vercel-inspired light theme colors */
   --window-c-background: #fff;
   --window-c-titlebar-background: #fff;
-  --window-c-titlebar-border: #8080801a;
-  --window-c-text: #000000c8;
-  --window-c-hover: #ececec;
-  --window-c-popup-background: #f6f6f6;
-  --window-c-popup-border: #dcdcdc;
-  --window-c-popup-shadow: hsla(0, 0%, 0%, 0.1);
-  --window-c-separator: #80808033;
-  --window-c-control-hover: #0000001a;
+  --window-c-titlebar-border: #e5e5e5;
+  --window-c-text: #000;
+  --window-c-hover: #f5f5f5;
+  --window-c-popup-background: #fff;
+  --window-c-popup-border: #e5e5e5;
+  --window-c-popup-shadow: rgba(0, 0, 0, 0.08);
+  --window-c-separator: #e5e5e5;
+  --window-c-control-hover: rgba(0, 0, 0, 0.05);
   --window-c-control-close-hover: #ff453b;
   --window-c-control-close-hover-text: #fff;
-  --window-c-scrollbar-track: #e0e0e0;
-  --window-c-scrollbar-thumb: #b0b0b0;
-  --window-c-scrollbar-thumb-hover: #888888cf;
+  --window-c-scrollbar-track: #f5f5f5;
+  --window-c-scrollbar-thumb: #ccc;
+  --window-c-scrollbar-thumb-hover: #999;
   --window-c-text-shadow: transparent;
 }
 
@@ -62,11 +64,14 @@
   overflow-y: auto;
   overflow-x: hidden;
   position: relative;
+  display: flex;
+  flex-direction: column;
 }
 
-/* Assign last children to use full height of window content */
-.window-content div:last-child {
-  height: 100%;
+/* Ensure content fills available space without forcing overflow */
+.window-content > * {
+  flex: 1;
+  min-height: 0;
 }
 
 .window-titlebar {

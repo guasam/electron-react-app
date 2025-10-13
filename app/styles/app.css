@@ -3,14 +3,23 @@
 
 body {
   font-family:
-    system-ui,
     -apple-system,
-    Arial,
-    Helvetica,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    'Roboto',
+    'Oxygen',
+    'Ubuntu',
+    'Cantarell',
+    'Fira Sans',
+    'Droid Sans',
+    'Helvetica Neue',
     sans-serif;
   font-size: 14px;
   margin: 0;
   overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: 'rlig' 1, 'calt' 1;
 }
 
 html,
@@ -18,5 +27,5 @@ body,
 #app {
   height: 100%;
   margin: 0;
-  line-height: 1.4;
+  line-height: 1.5;
 }
