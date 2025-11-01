@@ -29,6 +29,7 @@ export default defineConfig({
       rollupOptions: {
         input: {
           preload: resolve(__dirname, 'lib/preload/preload.ts'),
+          webviewSelectorBridge: resolve(__dirname, 'lib/preload/webview-selector-bridge.ts'),
         },
       },
     },

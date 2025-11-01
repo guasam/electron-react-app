@@ -29,3 +29,11 @@ declare module '*.web' {
   const content: string
   export default content
 }
+
+declare global {
+  interface Window {
+    inspectorBridge?: {
+      webviewPreload?: string
+    }
+  }
+}

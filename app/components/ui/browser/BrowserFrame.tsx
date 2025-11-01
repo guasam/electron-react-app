@@ -52,6 +52,7 @@ export default function BrowserFrame({
   const sessionActiveRef = React.useRef<boolean>(false)
   const [steps, setSteps] = React.useState({ setup: false, branch: false, start: false, connect: false })
   const inspectorApi = useConveyor('inspector')
+  const webviewPreload = (window as typeof window & { inspectorBridge?: { webviewPreload?: string } }).inspectorBridge?.webviewPreload
 
   const handleElementSelected = React.useCallback(async (element: ElementIdentity) => {
     onElementSelectorDismiss?.()
@@ -72,7 +73,14 @@ export default function BrowserFrame({
           componentName: element.attributes['data-component'] || element.id || element.className?.split(/\s+/)[0],
         },
         workspacePath
-      )
+      ) as {
+        matches: Array<{
+          relativePath: string
+          lineNumber: number
+          preview: string
+          score: number
+        }>
+      }
 
       if (!searchResult.matches.length) {
         onElementContext?.({ element })
@@ -84,7 +92,12 @@ export default function BrowserFrame({
         workspacePath,
         bestMatch.relativePath,
         bestMatch.lineNumber
-      )
+      ) as {
+        code: string
+        startLine: number
+        endLine: number
+        absolutePath: string
+      }
 
       onElementContext?.({
         element,
@@ -316,6 +329,7 @@ export default function BrowserFrame({
           ref={webviewRef as unknown as React.RefObject<any>}
           src={url || 'about:blank'}
           partition={partitionId}
+          preload={webviewPreload}
           style={{ width: '100%', height: '100%' }}
           allowpopups
         />

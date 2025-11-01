@@ -1,4 +1,5 @@
 import React from 'react'
+import type { IpcMessageEvent } from 'electron'
  
 
 export interface ElementIdentity {
@@ -9,6 +10,13 @@ export interface ElementIdentity {
   attributes: Record<string, string>
 }
 
+const SELECTOR_MESSAGE_SOURCE = 'inspector-element-selector' as const
+
+type SelectorBridgeMessage =
+  | { source: typeof SELECTOR_MESSAGE_SOURCE; type: 'INSPECTOR_ELEMENT_SELECTED'; payload: ElementIdentity }
+  | { source: typeof SELECTOR_MESSAGE_SOURCE; type: 'INSPECTOR_ELEMENT_SELECTOR_CANCELLED' }
+  | { source: typeof SELECTOR_MESSAGE_SOURCE; type: 'INSPECTOR_ELEMENT_SELECTOR_ERROR'; error: string }
+
 interface ElementSelectorProps {
   webviewRef: React.RefObject<Electron.WebviewTag | null>
   enabled: boolean
@@ -16,9 +24,9 @@ interface ElementSelectorProps {
   onRequestDisable: () => void
 }
 
-export function ElementSelector({ webviewRef, enabled, onSelected, onRequestDisable: _onRequestDisable }: ElementSelectorProps) {
-  const pollingRef = React.useRef<number | null>(null)
+export function ElementSelector({ webviewRef, enabled, onSelected, onRequestDisable }: ElementSelectorProps) {
   const injectedRef = React.useRef<boolean>(false)
+  const pollingRef = React.useRef<number | null>(null)
 
   const injectSelector = React.useCallback(async () => {
     if (!webviewRef.current || injectedRef.current) return
@@ -29,6 +37,15 @@ export function ElementSelector({ webviewRef, enabled, onSelected, onRequestDisa
       (function() {
         if (window.__inspectorSelectorActive) return;
         window.__inspectorSelectorActive = true;
+
+        const MESSAGE_SOURCE = '${SELECTOR_MESSAGE_SOURCE}';
+        const postToHost = (type, payload) => {
+          try {
+            window.postMessage({ source: MESSAGE_SOURCE, type, payload }, '*');
+          } catch (error) {
+            console.error('Failed to post element selector message', error);
+          }
+        };
 
         const overlay = document.createElement('div');
         overlay.id = '__inspector_selector_overlay';
@@ -146,14 +163,17 @@ export function ElementSelector({ webviewRef, enabled, onSelected, onRequestDisa
           event.preventDefault();
           event.stopPropagation();
           if (latestInfo) {
-            window.__inspectorSelectorResult = latestInfo;
+            postToHost('INSPECTOR_ELEMENT_SELECTED', latestInfo);
+            // Legacy fallback for hosts that still poll
+            try { window.__inspectorSelectorResult = latestInfo } catch {}
           }
           cleanup();
         };
 
         const onKeyDown = (event) => {
           if (event.key === 'Escape') {
-            window.__inspectorSelectorResult = null;
+            postToHost('INSPECTOR_ELEMENT_SELECTOR_CANCELLED');
+            try { window.__inspectorSelectorResult = null } catch {}
             cleanup();
           }
         };
@@ -189,9 +209,12 @@ export function ElementSelector({ webviewRef, enabled, onSelected, onRequestDisa
   }, [webviewRef])
 
   React.useEffect(() => {
-    if (!enabled) {
+    const view = webviewRef.current
+
+    if (!enabled || !view) {
       if (injectedRef.current) {
-        clearSelector()
+        clearSelector().catch(() => {})
+        injectedRef.current = false
       }
       if (pollingRef.current) {
         window.clearInterval(pollingRef.current)
@@ -200,12 +223,41 @@ export function ElementSelector({ webviewRef, enabled, onSelected, onRequestDisa
       return
     }
 
-    // Only inject if we haven't already injected
     if (!injectedRef.current) {
-      injectSelector().catch(console.error)
+      injectSelector().catch(error => {
+        console.error('Failed to inject element selector', error)
+        injectedRef.current = false
+        onRequestDisable()
+      })
     }
 
-    // Set up polling interval only once
+    const handleMessage = (event: IpcMessageEvent) => {
+      if (event.channel !== 'inspector-element-selector') return
+      const [raw] = Array.isArray(event.args) ? event.args : []
+      if (!raw || typeof raw !== 'object') return
+
+      const message = raw as SelectorBridgeMessage
+      if (message.source !== SELECTOR_MESSAGE_SOURCE) return
+
+      if (message.type === 'INSPECTOR_ELEMENT_SELECTED') {
+        injectedRef.current = false
+        clearSelector().catch(() => {})
+        onSelected(message.payload)
+      } else if (message.type === 'INSPECTOR_ELEMENT_SELECTOR_CANCELLED') {
+        injectedRef.current = false
+        clearSelector().catch(() => {})
+        onRequestDisable()
+      } else if (message.type === 'INSPECTOR_ELEMENT_SELECTOR_ERROR') {
+        injectedRef.current = false
+        console.error('Element selector error from webview:', message.error)
+        clearSelector().catch(() => {})
+        onRequestDisable()
+      }
+    }
+
+    view.addEventListener('ipc-message', handleMessage)
+
+    // Fallback: short-lived polling only while selector is active
     if (!pollingRef.current) {
       pollingRef.current = window.setInterval(async () => {
         if (!webviewRef.current) return
@@ -214,24 +266,27 @@ export function ElementSelector({ webviewRef, enabled, onSelected, onRequestDisa
           if (result) {
             await webviewRef.current.executeJavaScript('window.__inspectorSelectorResult = null')
             injectedRef.current = false
+            clearSelector().catch(() => {})
             onSelected(result)
           }
-        } catch (error) {
-          console.error('Failed to retrieve selector result', error)
+        } catch {
+          // ignore
         }
       }, 120)
     }
 
     return () => {
+      view.removeEventListener('ipc-message', handleMessage)
+      if (injectedRef.current) {
+        clearSelector().catch(() => {})
+        injectedRef.current = false
+      }
       if (pollingRef.current) {
         window.clearInterval(pollingRef.current)
         pollingRef.current = null
       }
-      if (injectedRef.current) {
-        clearSelector().catch(() => {})
-      }
     }
-  }, [enabled, injectSelector, clearSelector, onSelected, webviewRef])
+  }, [enabled, injectSelector, clearSelector, onSelected, onRequestDisable, webviewRef])
 
   
 
