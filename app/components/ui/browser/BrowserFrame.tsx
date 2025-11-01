@@ -3,15 +3,42 @@ import BrowserTopBar from './BrowserTopBar'
 import { useTabs } from '@/app/components/window/TabsContext'
 import WorkspaceLoadingSteps from '@/app/components/ui/browser/skeletons/WorkspaceLoadingSteps'
 import { AnimatePresence, motion } from 'framer-motion'
+import { ElementSelector, ElementIdentity } from './ElementSelector'
+import { useConveyor } from '@/app/hooks/use-conveyor'
 
 interface BrowserViewProps {
   initialUrl?: string
   heightClassName?: string
   partitionId: string
   tabId: string
+  workspacePath?: string
+  showElementSelector?: boolean
+  onElementSelectorDismiss?: () => void
+  onElementSelectorRequest?: () => void
+  onElementContext?: (context: ElementSelectionContext) => void
 }
 
-export default function BrowserFrame({ initialUrl = 'http://localhost:3000', heightClassName = 'h-full', partitionId, tabId }: BrowserViewProps) {
+export interface ElementSelectionContext {
+  element: ElementIdentity
+  codeSnippet?: {
+    code: string
+    relativePath: string
+    startLine: number
+    endLine: number
+  }
+}
+
+export default function BrowserFrame({
+  initialUrl = 'http://localhost:3000',
+  heightClassName = 'h-full',
+  partitionId,
+  tabId,
+  workspacePath,
+  showElementSelector = false,
+  onElementSelectorDismiss,
+  onElementSelectorRequest,
+  onElementContext,
+}: BrowserViewProps) {
   const [url, setUrl] = React.useState<string>(initialUrl)
   const webviewRef = React.useRef<Electron.WebviewTag | null>(null)
   const { updateTab, tabs, openingTabId, endOpeningTab } = useTabs()
@@ -24,6 +51,55 @@ export default function BrowserFrame({ initialUrl = 'http://localhost:3000', hei
   const activeLoadIdRef = React.useRef<number>(0)
   const sessionActiveRef = React.useRef<boolean>(false)
   const [steps, setSteps] = React.useState({ setup: false, branch: false, start: false, connect: false })
+  const inspectorApi = useConveyor('inspector')
+
+  const handleElementSelected = React.useCallback(async (element: ElementIdentity) => {
+    onElementSelectorDismiss?.()
+
+    if (!workspacePath) {
+      console.warn('Cannot map element to code without workspace path')
+      onElementContext?.({ element })
+      return
+    }
+
+    try {
+      const searchResult = await inspectorApi.inspectorSearchElement(
+        {
+          tagName: element.tagName,
+          id: element.id,
+          className: element.className,
+          textContent: element.textContent,
+          componentName: element.attributes['data-component'] || element.id || element.className?.split(/\s+/)[0],
+        },
+        workspacePath
+      )
+
+      if (!searchResult.matches.length) {
+        onElementContext?.({ element })
+        return
+      }
+
+      const bestMatch = searchResult.matches[0]
+      const code = await inspectorApi.inspectorGetElementCode(
+        workspacePath,
+        bestMatch.relativePath,
+        bestMatch.lineNumber
+      )
+
+      onElementContext?.({
+        element,
+        codeSnippet: {
+          code: code.code,
+          relativePath: bestMatch.relativePath,
+          startLine: code.startLine,
+          endLine: code.endLine,
+        },
+      })
+    } catch (error) {
+      console.error('Failed to map element to code', error)
+      onElementContext?.({ element })
+    }
+  }, [inspectorApi, workspacePath, onElementSelectorDismiss, onElementContext])
 
   const handleBack = () => {
     const view = webviewRef.current
@@ -273,6 +349,15 @@ export default function BrowserFrame({ initialUrl = 'http://localhost:3000', hei
             </AnimatePresence>
           )
         })()}
+
+        <ElementSelector
+          webviewRef={webviewRef}
+          enabled={showElementSelector}
+          onSelected={handleElementSelected}
+          onRequestDisable={() => {
+            onElementSelectorDismiss?.()
+          }}
+        />
       </div>
     </div>
   )

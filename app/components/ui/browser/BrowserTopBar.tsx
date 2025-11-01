@@ -44,7 +44,6 @@ export default function BrowserTopBar({ url = 'http://localhost:3000', onBack, o
             </button>
             </Tooltip>
         )}
-        
 
         {/* Address bar */}
         <div className="flex-1 min-w-0">

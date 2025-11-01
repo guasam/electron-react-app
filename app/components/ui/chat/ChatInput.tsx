@@ -1,8 +1,8 @@
 import React from 'react'
 import { Button } from '../button'
-import { 
-  Plus, 
-  Camera, 
+import {
+  MousePointer2,
+  Camera,
   ArrowUp,
   AtSign
 } from 'lucide-react'
@@ -22,6 +22,8 @@ interface ChatInputProps {
   defaultModel?: string
   onModeChange?: (mode: string) => void
   onModelChange?: (model: string) => void
+  onRequestElementSelector?: () => void
+  isElementSelectorActive?: boolean
 }
 
 export const ChatInput: React.FC<ChatInputProps> = ({
@@ -36,6 +38,8 @@ export const ChatInput: React.FC<ChatInputProps> = ({
   defaultModel = 'gpt-5',
   onModeChange,
   onModelChange,
+  onRequestElementSelector,
+  isElementSelectorActive = false,
 }) => {
   const textareaRef = React.useRef<HTMLTextAreaElement | null>(null)
   const containerRef = React.useRef<HTMLDivElement | null>(null)
@@ -47,7 +51,7 @@ export const ChatInput: React.FC<ChatInputProps> = ({
 
   // Compact UI flags determined by container width
   const [hideModel, setHideModel] = React.useState(false)
-  const [hidePlus, setHidePlus] = React.useState(false)
+  const [hidePicker, setHidePicker] = React.useState(false)
   const [hideAt, setHideAt] = React.useState(false)
   const [hideCamera, setHideCamera] = React.useState(false)
   const [hideAgentText, setHideAgentText] = React.useState(false)
@@ -88,7 +92,7 @@ export const ChatInput: React.FC<ChatInputProps> = ({
       const w = el.clientWidth
       // thresholds tuned to typical icon widths; adjust as needed
       setHideModel(w < 320)
-      setHidePlus(w < 260)
+      setHidePicker(w < 260)
       setHideAt(w < 220)
       setHideCamera(w < 180)
       setHideAgentText(w < 140)
@@ -160,14 +164,15 @@ export const ChatInput: React.FC<ChatInputProps> = ({
 
             {/* Action bar row anchored bottom-right */}
             <div className="flex items-center justify-end gap-1">
-              {!hidePlus && (
-                <Button 
-                  variant="ghost" 
-                  size="icon" 
+              {!hidePicker && (
+                <Button
+                  variant="ghost"
+                  size="icon"
                   className="size-8 text-neutral-400 hover:text-neutral-600 hover:bg-transparent dark:text-neutral-500 dark:hover:text-neutral-300 dark:hover:bg-transparent"
-                  disabled={disabled}
+                  disabled={disabled || !onRequestElementSelector}
+                  onClick={onRequestElementSelector}
                 >
-                  <Plus className="size-4" />
+                  <MousePointer2 className={`size-4 ${isElementSelectorActive ? 'text-blue-400 dark:text-blue-500' : ''}`} />
                 </Button>
               )}
               {!hideAt && (
@@ -181,8 +186,8 @@ export const ChatInput: React.FC<ChatInputProps> = ({
                 </Button>
               )}
               {!hideCamera && (
-                <Button 
-                  variant="ghost" 
+                <Button
+                  variant="ghost"
                   size="icon"
                   className="size-8 text-neutral-400 hover:text-neutral-600 hover:bg-transparent dark:text-neutral-500 dark:hover:text-neutral-300 dark:hover:bg-transparent"
                   disabled={disabled}
@@ -190,7 +195,7 @@ export const ChatInput: React.FC<ChatInputProps> = ({
                   <Camera className="size-4" />
                 </Button>
               )}
-              <Button 
+              <Button
                 size="icon"
                 className="size-8 rounded-full bg-neutral-900 text-white hover:bg-neutral-800 dark:bg-neutral-100 dark:text-neutral-900 dark:hover:bg-neutral-200"
                 disabled={!value.trim() || disabled}
