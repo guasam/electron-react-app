@@ -29,11 +29,12 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({ elementContext, onReques
     if (lastContextKey.current === key) return
 
     if (elementContext.codeSnippet) {
-      const header = `@${elementContext.codeSnippet.relativePath}:${elementContext.codeSnippet.startLine}-${elementContext.codeSnippet.endLine}`
+      const codeSnippet = elementContext.codeSnippet
+      const header = `@${codeSnippet.relativePath}:${codeSnippet.startLine}-${codeSnippet.endLine}`
       setInputValue((prev) => {
         const needsSpacer = prev.length > 0 && !prev.endsWith('\n')
         const spacer = prev.length === 0 ? '' : needsSpacer ? '\n\n' : '\n'
-        return `${prev}${spacer}${header}\n\u0060\u0060\u0060\n${elementContext.codeSnippet.code}\n\u0060\u0060\u0060\n`
+        return `${prev}${spacer}${header}\n\u0060\u0060\u0060\n${codeSnippet.code}\n\u0060\u0060\u0060\n`
       })
     } else {
       const labelParts = [elementContext.element.tagName]

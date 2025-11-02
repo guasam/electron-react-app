@@ -30,6 +30,16 @@ declare module '*.web' {
   export default content
 }
 
+declare module '*?raw' {
+  const content: string
+  export default content
+}
+
+declare module '@/lib/webview-injections/element-selector.js?raw' {
+  const content: string
+  export default content
+}
+
 declare global {
   interface Window {
     inspectorBridge?: {
