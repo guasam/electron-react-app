@@ -3,7 +3,7 @@
   --window-icon-height: 16px;
   --window-title-margin: 42px;
   --window-titlebar-height: 40px;
-  --window-titlebar-font-size: 13px;
+  --window-titlebar-font-size: 14px;
   --window-scrollbar-width: 12px;
   --window-mac-titlebar-controls-margin: 80px;
   --window-background-transition-duration: 0.3s;
@@ -64,8 +64,7 @@
   position: relative;
 }
 
-/* Assign last children to use full height of window content */
-.window-content div:last-child {
+.window-content > div:last-child {
   height: 100%;
 }
 
@@ -126,7 +125,7 @@
   flex-direction: row;
   gap: 2px;
   position: absolute;
-  top: 9px;
+  top: 8px;
   left: var(--window-title-margin);
   -webkit-app-region: no-drag;
   font-size: var(--window-titlebar-font-size);
@@ -134,7 +133,6 @@
 
 .titlebar-menuItem .menuItem-label {
   padding: 2px 8px;
-  cursor: pointer;
   border-radius: 4px;
   font-weight: var(--window-titlebar-font-weight, normal);
 }
@@ -147,7 +145,7 @@
 .titlebar-menuItem .menuItem-popup {
   position: fixed;
   background-color: var(--window-c-popup-background);
-  top: 32px;
+  top: calc(var(--window-titlebar-height) - 4px);
   min-width: 100px;
   border: 1px solid var(--window-c-popup-border);
   padding: 0.25rem 0;
