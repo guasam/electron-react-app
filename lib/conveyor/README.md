@@ -103,6 +103,7 @@ export const fileIpcSchema = {
 ```
 
 **Schema Purpose:**
+
 - **`args`**: Defines the expected arguments that will be passed from the renderer to the main process. These are validated at runtime using Zod.
 - **`return`**: Defines the expected return type from the main process back to the renderer. This ensures type safety and runtime validation of the response.
 
@@ -186,8 +187,6 @@ registerFileHandlers()
 ```
 
 **Note**: Global types are automatically updated when you add new APIs to the conveyor export, so no manual updates are needed!
-
-
 
 ## Type Safety Features
 
