@@ -4,6 +4,63 @@ All notable changes to the electron-react-app (ERA) are listed here.
 
 <br>
 
+## v12.1.0
+
+- 🎉 Electron version upgraded to `v40.1.0`
+- Update shadcn components in use
+- Added `npm run format` command for prettier code formatting
+- Refactor electron-builder configuration
+- Simplified error boundary component + selectable text
+- Fix: window styles that caused children div elements to have full height
+- Tweak titlebar icon display condition for darwin platform
+- Improve welcome content text and styles
+- Upgraded dependencies to latest usable versions:
+
+<details>
+<summary><strong>📋 View Dependency Updates</strong></summary>
+
+```bash
+↑ @electron-toolkit/eslint-config-prettier@3.0.0
+↑ @electron-toolkit/tsconfig@2.0.0
+↑ @eslint/js@10.0.1
+↑ @rushstack/eslint-patch@1.15.0
+↑ @tailwindcss/vite@4.1.18
+↑ @types/node@25.2.3
+↑ @types/react@19.2.14
+↑ @types/react-dom@19.2.3
+↑ @vitejs/plugin-react@5.1.4
+↑ cross-env@10.1.0
+↑ electron@40.4.0
+↑ electron-builder@26.7.0
+↑ electron-vite@5.0.0
+↑ eslint@10.0.0
+↑ eslint-plugin-react@7.37.5
+↑ eslint-plugin-react-hooks@7.0.1
+↑ framer-motion@12.34.0
+↑ npm-run-all@4.1.5
+↑ prettier@3.8.1
+↑ react@19.2.4
+↑ react-dom@19.2.4
+↑ tailwindcss@4.1.18
+↑ typescript@5.9.3
+↑ typescript-eslint@8.55.0
+↑ vite@7.3.1
+↑ @electron-toolkit/preload@3.0.2
+↑ @electron-toolkit/utils@4.0.0
+↑ @radix-ui/react-slot@1.2.4
+↑ @radix-ui/react-switch@1.2.6
+↑ class-variance-authority@0.7.1
+↑ clsx@2.1.1
+↑ lucide-react@0.563.0
+↑ tailwind-merge@3.4.0
+↑ tw-animate-css@1.4.0
+↑ zod@4.3.6
+```
+
+</details>
+
+<br>
+
 ## v12.0.0
 
 - 🎉 Electron version upgraded to `v37`
