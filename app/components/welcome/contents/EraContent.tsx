@@ -22,12 +22,12 @@ const EraContent = () => {
     <div>
       <h2 className="flex items-center gap-4">Electron React App</h2>
       <p>
-        Welcome to the Electron React App (v{appVersion})! A prebuilt starter kit that provides a solid foundation for
-        developing desktop applications.
+        Welcome to the Electron React App "v{appVersion}". A starter kit that provides a solid foundation for developing
+        desktop applications.
       </p>
       <p>
-        This project is built with Electron, React, Vite, TypeScript, and Tailwind CSS to provide a modern development
-        environment with the latest features.
+        This project utilizes Electron, React, Vite, TypeScript, and Tailwind CSS to provide a modern development
+        environment with the latest features and tools.
       </p>
 
       <div className="welcome-content-steps">
@@ -50,8 +50,8 @@ const EraContent = () => {
         />
 
         <ContentStep
-          title="IPC Communication Handlers"
-          description="API handlers for communication between main and renderer processes"
+          title="Conveyor - IPC Communication"
+          description="Type-safe inter-process communication system"
           icon={AsterikIcon}
         />
       </div>
@@ -59,7 +59,7 @@ const EraContent = () => {
       <p className="learn-more">
         Learn more about Electron React App at{' '}
         <a href="https://github.com/guasam/electron-react-app" target="_blank" rel="noreferrer">
-          github.com
+          Github
         </a>
       </p>
     </div>

@@ -100,14 +100,12 @@
   width: 20px;
   height: 20px;
   fill: var(--welcome-c-variant);
-  /* fill: #8aa6cf; */
   margin: 0 20px;
 }
 
 .welcome-content .learn-more {
   margin-top: 2.5rem;
   font-size: 13px;
-  opacity: 0.7;
 }
 
 .welcome-content .learn-more a {
