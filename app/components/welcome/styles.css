@@ -8,7 +8,7 @@
 
 #era-shape {
   position: relative;
-  width: 250px;
+  width: 230px;
 }
 
 #era-shape > span {
@@ -16,7 +16,7 @@
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  font-size: 1.05rem;
+  font-size: 0.875rem;
   font-weight: bold;
   opacity: 0.9;
 }
