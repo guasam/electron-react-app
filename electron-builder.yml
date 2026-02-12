@@ -1,5 +1,8 @@
 appId: com.guasam.era
-productName: ElectronReactApp
+productName: electron-react-app
+asar: true
+asarUnpack:
+  - resources/**
 directories:
   buildResources: resources/build
 files:
@@ -9,10 +12,8 @@ files:
   - '!{.eslintignore,.eslintrc.cjs,.prettierignore,.prettierrc.yaml,dev-app-update.yml,CHANGELOG.md,README.md}'
   - '!{.env,.env.*,.npmrc,pnpm-lock.yaml}'
   - '!{tsconfig.json,tsconfig.node.json,tsconfig.web.json}'
-asarUnpack:
-  - resources/**
 win:
-  executableName: ElectronReactApp
+  executableName: electron-react-app
 nsis:
   artifactName: ${name}-${version}-setup.${ext}
   shortcutName: ${productName}
