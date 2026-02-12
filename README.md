@@ -4,12 +4,12 @@ A modern Electron application template with React, Vite, TypeScript, and Tailwin
 
 <br />
 
-![Electron](https://img.shields.io/badge/v37.3.1-Electron-blue) &nbsp;
-![React](https://img.shields.io/badge/v19.1.1-React-blue) &nbsp;
-![TypeScript](https://img.shields.io/badge/v5.9.2-TypeScript-blue) &nbsp;
-![Vite](https://img.shields.io/badge/v7.1.3-Vite-blue) &nbsp;
+![Electron](https://img.shields.io/badge/v40.1.0-Electron-blue) &nbsp;
+![React](https://img.shields.io/badge/v19.2.4-React-blue) &nbsp;
+![TypeScript](https://img.shields.io/badge/v5.9.3-TypeScript-blue) &nbsp;
+![Vite](https://img.shields.io/badge/v7.3.1-Vite-blue) &nbsp;
 ![Shadcn](https://img.shields.io/badge/Shadcn-UI-blue) &nbsp;
-![Tailwind](https://img.shields.io/badge/v4.1.12-Tailwind-blue)
+![Tailwind](https://img.shields.io/badge/v4.1.18-Tailwind-blue)
 
 <br />
 
