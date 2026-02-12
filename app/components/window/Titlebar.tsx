@@ -29,7 +29,7 @@ export const Titlebar = () => {
 
   return (
     <div className={`window-titlebar ${wcontext?.platform ? `platform-${wcontext.platform}` : ''}`}>
-      {wcontext?.platform === 'win32' && (
+      {wcontext?.platform !== 'darwin' && (
         <div className="window-titlebar-icon">
           <img src={icon} />
         </div>
