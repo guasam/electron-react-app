@@ -5,12 +5,7 @@ import AsterikIcon from '../icons/AsterikIcon'
 const ReactContent = () => {
   return (
     <div>
-      <h2 className="flex items-center gap-4">
-        React
-        <div className="p-1 rounded-md bg-primary/10">
-          <img src="res://icons/react.png" className="w-4 h-4" />
-        </div>
-      </h2>
+      <h2 className="flex items-center gap-4">React</h2>
       <p>React is a declarative, efficient, and flexible JavaScript library for building user interfaces.</p>
       <p>
         It lets you build user interfaces out of individual pieces called components, creating reusable and maintainable

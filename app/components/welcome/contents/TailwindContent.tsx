@@ -5,12 +5,7 @@ import AsterikIcon from '../icons/AsterikIcon'
 const TailwindContent = () => {
   return (
     <div>
-      <h2 className="flex items-center gap-4">
-        Tailwind CSS
-        <div className="p-1 rounded-md bg-primary/10">
-          <img src="res://icons/tailwind.png" className="w-4 h-4" />
-        </div>
-      </h2>
+      <h2 className="flex items-center gap-4">Tailwind CSS</h2>
       <p>A utility-first CSS framework for rapidly building custom user interfaces.</p>
       <p>
         Tailwind CSS provides low-level utility classes that let you build completely custom designs without ever

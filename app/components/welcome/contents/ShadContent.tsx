@@ -5,12 +5,7 @@ import AsterikIcon from '../icons/AsterikIcon'
 const ShadContent = () => {
   return (
     <div>
-      <h2 className="flex items-center gap-4">
-        Shadcn UI
-        <div className="p-1 rounded-md bg-primary/10">
-          <img src="res://icons/shadcn.png" className="w-4 h-4" />
-        </div>
-      </h2>
+      <h2 className="flex items-center gap-4">Shadcn UI</h2>
       <p>A collection of re-usable components built with Radix UI and Tailwind CSS.</p>
       <p>
         Shadcn UI provides a set of accessible, customizable, and beautiful components that you can copy and paste into

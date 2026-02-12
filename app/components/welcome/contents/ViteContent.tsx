@@ -5,12 +5,7 @@ import AsterikIcon from '../icons/AsterikIcon'
 const ViteContent = () => {
   return (
     <div>
-      <h2 className="flex items-center gap-4">
-        Electron Vite
-        <div className="p-1 rounded-md bg-primary/10">
-          <img src="res://icons/vite.png" className="w-4 h-4" />
-        </div>
-      </h2>
+      <h2 className="flex items-center gap-4">Electron Vite</h2>
       <p>Combine Electron's desktop capabilities with Vite's lightning-fast development experience.</p>
       <p>
         This powerful combination delivers exceptional developer experience with instant HMR, while allowing you to
