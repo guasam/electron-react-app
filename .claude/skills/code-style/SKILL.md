@@ -11,31 +11,38 @@ skill covers the judgment calls tooling can't make.
 
 ## Section banners
 
-When a file has several distinct groups of declarations, head each group with exactly this
-banner shape (dash lines run to column 60):
+Two tiers, both line comments (each line stands alone — nothing can swallow code, and they
+paste anywhere including JSX). Rules run to column 67.
+
+**Major section** — `=` rules, UPPERCASE title:
 
 ```ts
-/* ----------------------------------------------------------
- * Middleware
- * ----------------------------------------------------------
- */
+// ================================================================
+// MIDDLEWARE
+// ================================================================
 ```
 
-A group that needs one line of justification carries it inside the banner, under the title:
+**Subsection** inside a major section — a single `-` rule with an inline lowercase title:
 
 ```ts
-/* ----------------------------------------------------------
- * Def guards
- * Named tests for "which kind of def is this" — `any` params
- * dodge resolver contravariance.
- * ----------------------------------------------------------
- */
+// ---- envelope --------------------------------------------------
+```
+
+A section that needs justification carries it as ordinary `//` lines directly under the banner:
+
+```ts
+// ================================================================
+// DEF GUARDS
+// ================================================================
+// Named tests for "which kind of def is this" — the `any` params
+// dodge resolver-parameter contravariance.
 ```
 
 - The title is a short noun phrase, nothing appended.
 - Only use banners when a file actually has 3+ groups; a short single-purpose file needs none.
-- Never the single-line form `/* -- Title ------- */` — that's the old convention, replace it
-  on sight when already editing the file.
+  Reach for subsections only when a major section is itself long — most files never need them.
+- Never the old forms (`/* -- Title --- */` or `/* ---- \n * Title` blocks) — replace them on
+  sight when already editing the file.
 
 ## Comments
 
