@@ -3,13 +3,12 @@ import { createRouter, devLogger } from 'electron-conveyor/main'
 import { windows, openAppWindow } from '@/lib/main/app'
 import { windowModule, setupWindowEvents } from './modules/window'
 import { webModule } from './modules/web'
-import { filesModule } from './modules/files'
+import { analyzerModule } from './modules/analyzer'
 import { systemModule } from './modules/system'
 import { streamModule } from './modules/stream'
 import { secureModule } from './modules/secure'
 import { windowsModule } from './modules/windows'
 import { notifyModule } from './modules/notify'
-import { tasksModule } from './modules/tasks'
 import { sharedStore } from './stores/shared'
 import { presenceStore } from './stores/presence'
 
@@ -26,13 +25,12 @@ export const router = createRouter(
   {
     window: windowModule,
     web: webModule,
-    files: filesModule,
+    analyzer: analyzerModule,
     system: systemModule,
     stream: streamModule,
     secure: secureModule,
     windows: windowsModule,
     notify: notifyModule,
-    tasks: tasksModule,
   },
   {
     createContext: () => ({ appStartedAt: APP_STARTED_AT, windows, openWindow: openAppWindow }),

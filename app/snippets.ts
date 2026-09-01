@@ -39,35 +39,26 @@ for await (const token of conveyor.stream.respond(prompt)) {
 }`,
     output: 'streaming · tokens flowing',
   },
-  files: {
-    file: 'conveyor/modules/files.ts',
-    code: `open: command(async ({ ctx }) => {
-  const { canceled, filePaths } = await dialog.showOpenDialog(ctx.window, {
-    properties: ['openFile'],
-    filters: [{ name: 'Text', extensions: ['txt', 'md', 'json'] }],
-  })
-  if (canceled) return null
-  return { name: basename(filePaths[0]), content: await readFile(filePaths[0]) }
+  analyzer: {
+    file: 'conveyor/modules/analyzer.ts',
+    code: `pick: command(async ({ ctx }) => {
+  const r = await dialog.showOpenDialog(ctx.window, { properties: ['openDirectory'] })
+  return r.canceled ? null : r.filePaths[0]
+}),
+
+scan: stream(z.string(), async function* ({ input: root, signal }) {
+  for (const dir of walk(root)) {            // REAL fs work, main-only
+    if (signal.aborted) return               // Stop is instant
+    yield { kind: 'progress', files, bytes, current: dir }
+  }
+  yield { kind: 'done', entries }            // one channel, two chunk kinds
 })
 
-const file = await conveyor.files.open()   // fully typed`,
-    output: 'read ~/notes.md · 4.2 KB',
-  },
-  tasks: {
-    file: 'conveyor/modules/tasks.ts',
-    code: `onProgress: event(z.object({ percent: z.number(), label: z.string() })),
-
-run: command(({ ctx }) => {
-  const emit = createEmitter(tasksModule, ctx.window)
-  const timer = setInterval(() => {
-    emit.onProgress({ percent, label })       // push to the renderer
-    if (percent >= 100) clearInterval(timer)
-  }, 90)
-})
-
-// renderer: subscribe; the bar fills as events arrive
-conveyor.tasks.onProgress.useEvent(setProgress)`,
-    output: 'task complete · 100%',
+// renderer: one loop, discriminated on kind
+for await (const c of conveyor.analyzer.scan(path)) {
+  c.kind === 'progress' ? setProgress(c) : setResult(c)
+}`,
+    output: 'scanning · 41,392 files · 1.2 GB',
   },
   system: {
     file: 'conveyor/modules/system.ts',

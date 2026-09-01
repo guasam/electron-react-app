@@ -1,4 +1,4 @@
-import { MessageSquare, Folder, Gauge, Activity, Copy, Shield, ArrowRight, type LucideIcon } from 'lucide-react'
+import { MessageSquare, Folder, Activity, Copy, Shield, ArrowRight, type LucideIcon } from 'lucide-react'
 import { type PageProps } from '../registry'
 
 interface Strip {
@@ -18,18 +18,11 @@ const STRIPS: Strip[] = [
     preview: StreamPreview,
   },
   {
-    id: 'files',
-    title: 'File access',
-    desc: 'Native dialog and read, scoped to the main process',
+    id: 'analyzer',
+    title: 'Folder analyzer',
+    desc: 'Native dialog, then a streamed scan feeding a live treemap',
     icon: Folder,
-    preview: FilePreview,
-  },
-  {
-    id: 'tasks',
-    title: 'Background task',
-    desc: 'Long jobs report progress live from main',
-    icon: Gauge,
-    preview: TaskPreview,
+    preview: AnalyzerPreview,
   },
   {
     id: 'system',
@@ -153,16 +146,18 @@ function StreamPreview() {
     </span>
   )
 }
-function FilePreview() {
-  return <Pill>~/notes.md · 4.2 KB</Pill>
-}
-function TaskPreview() {
+function AnalyzerPreview() {
+  // A miniature treemap: share-weighted brand tints, same as the real one.
+  const tiles = [58, 42, 30, 20] as const
   return (
-    <span className="flex items-center gap-2">
-      <span className="block h-1.5 w-16 overflow-hidden rounded-full bg-muted">
-        <span className="block h-full w-2/3 bg-brand" />
-      </span>
-      <span className="font-mono text-[10.5px] text-muted-foreground">63%</span>
+    <span className="flex h-6 items-stretch gap-[2px]">
+      {tiles.map((p, i) => (
+        <span
+          key={p}
+          className="rounded-[3px]"
+          style={{ width: `${26 - i * 5}px`, backgroundColor: `color-mix(in srgb, var(--brand) ${p}%, var(--card))` }}
+        />
+      ))}
     </span>
   )
 }

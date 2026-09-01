@@ -1,18 +1,8 @@
 import type { ComponentType } from 'react'
-import {
-  Home,
-  MessageSquare,
-  FolderOpen,
-  Gauge,
-  Activity,
-  StickyNote,
-  ShieldCheck,
-  type LucideIcon,
-} from 'lucide-react'
+import { Home, MessageSquare, FolderSearch, Activity, StickyNote, ShieldCheck, type LucideIcon } from 'lucide-react'
 import { Overview } from './pages/overview'
 import { StreamPage } from './pages/stream-page'
-import { FilesPage } from './pages/files-page'
-import { TasksPage } from './pages/tasks-page'
+import { AnalyzerPage } from './pages/analyzer-page'
 import { SystemPage } from './pages/system-page'
 import { StorePage } from './pages/store-page'
 import { SecurePage } from './pages/secure-page'
@@ -41,20 +31,12 @@ export const PAGES: PageDef[] = [
     component: StreamPage,
   },
   {
-    id: 'files',
-    label: 'File access',
-    blurb: 'Native dialog + read',
+    id: 'analyzer',
+    label: 'Folder analyzer',
+    blurb: 'Dialog + streamed scan',
     group: 'primitives',
-    icon: FolderOpen,
-    component: FilesPage,
-  },
-  {
-    id: 'tasks',
-    label: 'Background task',
-    blurb: 'Live progress from main',
-    group: 'primitives',
-    icon: Gauge,
-    component: TasksPage,
+    icon: FolderSearch,
+    component: AnalyzerPage,
   },
   {
     id: 'system',
