@@ -11,7 +11,7 @@ export interface AppContext {
   appStartedAt: number
   /** The label→window registry — fan-out targets (`windows.broadcast`, `.except(sender)`, ...). */
   windows: ConveyorWindowManager
-  /** Open another app window, optionally deep-linked onto a playground page. */
+  /** Open another app window, optionally deep-linked onto a page (via the URL hash). */
   openWindow: (page?: string) => void
 }
 

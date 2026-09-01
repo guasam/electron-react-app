@@ -44,7 +44,7 @@ cross-window state.
 | --------------------------- | ------------------------------------------------------------------------------ |
 | **Conveyor**                | Type-safe IPC: queries, commands, streams, events — end-to-end inference       |
 | **Cross-Window Stores**     | Main-owned state synced live across every window, with opt-in persistence      |
-| **Conveyor Playground**     | Interactive demo of every primitive, strippable with one command               |
+| **Demo Branch**             | Live playground of every primitive on the `demo` branch, main stays minimal    |
 | **Sandboxed Renderer**      | `sandbox: true` out of the box — the conveyor preload is sandbox-compatible    |
 | **Custom Titlebar & Menus** | Style the window titlebar and menus as you want                                |
 | **Clean Project Structure** | Separation of main and renderer processes                                      |
@@ -79,17 +79,23 @@ npm install
 npm run dev
 ```
 
-This starts Electron with hot-reload. The app opens on the **Conveyor Playground** — an
-interactive tour of every IPC primitive with the real source behind each demo (hit "View code").
+This starts Electron with hot-reload. `main` is deliberately minimal — a themed window frame,
+titlebar, menus, and the typed IPC layer — so you can start building your app on top of it
+immediately.
 
-When you're ready to build your own app on the shell:
+### Try the demo
+
+Want to see everything the stack can do first? The **`demo`** branch is an interactive
+playground of every IPC primitive (cross-window state, streaming, background tasks, middleware),
+with the real source behind each demo:
 
 ```bash
-npm run strip-demo
+git switch demo
+npm install
+npm run dev
 ```
 
-This removes the playground (`app/demo/`, `conveyor/demo/`) and leaves the minimal shell:
-titlebar, window/web modules, theming.
+Switch back to `main` (and re-run `npm install`) when you're ready to build.
 
 <br />
 
@@ -198,7 +204,7 @@ conveyor.window.onFocusChange.useEvent(setFocused)
 ### Cross-window stores
 
 ```ts
-// conveyor/demo/stores/shared.ts — pure, imported by BOTH processes
+// conveyor/stores/shared.ts — pure, imported by BOTH processes
 export const sharedStore = defineStore('shared', {
   state: { count: 0, notes: [] as string[] },
   schemas: { add: z.string() }, // payloads validated in main; types flow from the schema
@@ -222,7 +228,7 @@ const { add, increment } = useConveyorActions(sharedStore)
 
 Failures re-throw in the renderer as `ConveyorError` with a stable `code` — including custom codes
 thrown by your handlers (`throw new ConveyorError('LOCKED', '...')`). Branch on `err.code`, never
-on message strings. See the playground's **Middleware** page for a working example.
+on message strings. See the `demo` branch's **Middleware** page for a working example.
 
 📖 **Full API documentation: [electron-conveyor](https://github.com/guasam/electron-conveyor)**
 
@@ -269,7 +275,6 @@ To add, remove or modify menu items, update the following file:
 
 - **React application** that runs in the browser window
 - `app/shell/` — titlebar, menus, window frame, theme
-- `app/demo/` — the strippable Conveyor playground
 
 #### `conveyor/` - The IPC Surface
 
@@ -277,7 +282,6 @@ To add, remove or modify menu items, update the following file:
 - `conveyor/modules/` — feature modules (**main-process only**; the renderer imports only `type AppRouter`)
 - `conveyor/router.ts` — the single registration point (modules, stores, middleware, context)
 - `conveyor/client.ts` — the typed renderer client with hooks
-- `conveyor/demo/` — the playground's modules and stores (strippable)
 
 #### `lib/main/` - Main Process
 

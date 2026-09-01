@@ -3,12 +3,11 @@ import { createRouter, devLogger } from 'electron-conveyor/main'
 import { windows, openAppWindow } from '@/lib/main/app'
 import { windowModule, setupWindowEvents } from './modules/window'
 import { webModule } from './modules/web'
-import { demoModules, demoStores } from './demo' // @demo
 
 /**
  * The app's whole IPC surface — modules, stores, context, global middleware — registered in one
  * place. Runtime is MAIN-ONLY; the renderer imports only `type AppRouter`. `window` and `web` are
- * the core modules (the titlebar needs them); the rest come from the playground.
+ * the core modules (the titlebar needs them); add your own next to them in `modules/`.
  */
 
 /** Main-process start time — surfaced to handlers as `ctx.appStartedAt`. */
@@ -18,12 +17,10 @@ export const router = createRouter(
   {
     window: windowModule,
     web: webModule,
-    ...demoModules, // @demo
   },
   {
     createContext: () => ({ appStartedAt: APP_STARTED_AT, windows, openWindow: openAppWindow }),
     use: [devLogger], // per-call timing in dev, a no-op in packaged builds
-    stores: demoStores, // @demo
   }
 )
 

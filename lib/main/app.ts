@@ -9,7 +9,7 @@ export const windows = createWindowManager()
 
 let windowCount = 0
 
-/** Open a new tracked app window. `page` deep-links it onto a playground page (via the URL hash). */
+/** Open a new tracked app window. `page` deep-links it onto an app page (via the URL hash). */
 export function openAppWindow(page?: string): BrowserWindow {
   windowCount += 1
   const label = windowCount === 1 ? 'main' : `window-${windowCount}`

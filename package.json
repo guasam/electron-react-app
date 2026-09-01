@@ -23,7 +23,6 @@
     "build:win": "npm run vite:build:app && npm run electron:build:win",
     "build:mac": "npm run vite:build:app && npm run electron:build:mac",
     "build:linux": "npm run vite:build:app && npm run electron:build:linux",
-    "strip-demo": "node scripts/strip-demo.mjs",
     "typecheck": "tsc --noEmit -p tsconfig.node.json && tsc --noEmit -p tsconfig.web.json"
   },
   "repository": {
