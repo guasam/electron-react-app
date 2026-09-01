@@ -27,13 +27,13 @@ export type AppRouter = typeof router`,
   stream: {
     file: 'conveyor/modules/stream.ts',
     code: `respond: stream(z.string(), async function* ({ input, signal }) {
-  const events = client.messages.stream(
-    { model: 'claude-opus-5', max_tokens: 1024, messages: [{ role: 'user', content: input }] },
-    { signal },                          // Stop aborts the API call too
-  )
-  for await (const e of events) {
-    if (e.type === 'content_block_delta' && e.delta.type === 'text_delta')
-      yield e.delta.text                 // real model tokens, typed end to end
+  const chunks = await ai.models.generateContentStream({
+    model: 'gemini-2.5-flash',
+    contents: input,
+    config: { maxOutputTokens: 1024, abortSignal: signal },  // Stop aborts the read
+  })
+  for await (const chunk of chunks) {
+    if (chunk.text) yield chunk.text     // real model tokens, typed end to end
   }
 })
 
@@ -41,7 +41,7 @@ export type AppRouter = typeof router`,
 for await (const token of conveyor.stream.respond(prompt)) {
   append(token)
 }`,
-    output: 'streaming · live from claude-opus-5',
+    output: 'streaming · live from gemini-2.5-flash',
   },
   analyzer: {
     file: 'conveyor/modules/analyzer.ts',
