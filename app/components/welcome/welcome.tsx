@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Sidebar } from './sidebar'
 import { Hero } from './hero'
 import { Panel } from './panel'
+import { DemoPanel } from './demo-panel'
 import { STACK } from './stack'
 
 /**
@@ -12,13 +13,14 @@ import { STACK } from './stack'
  */
 export function Welcome() {
   const [active, setActive] = useState(STACK[0].id)
-  const entry = STACK.find((e) => e.id === active) ?? STACK[0]
+  // The demo pitch is not a stack entry, so it is the one id that resolves to nothing here.
+  const entry = STACK.find((e) => e.id === active)
 
   return (
     <div className="flex h-full min-h-0">
       <Sidebar active={active} onSelect={setActive} />
       <div className="min-w-0 flex-1 overflow-auto">
-        {entry.hero ? <Hero entry={entry} onSelect={setActive} /> : <Panel entry={entry} />}
+        {!entry ? <DemoPanel /> : entry.hero ? <Hero entry={entry} onSelect={setActive} /> : <Panel entry={entry} />}
       </div>
     </div>
   )

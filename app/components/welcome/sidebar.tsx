@@ -1,5 +1,7 @@
+import { ArrowRight } from 'lucide-react'
 import { conveyor } from '@/conveyor/client'
 import { cn } from '@/lib/utils'
+import { DEMO_ID } from './demo-panel'
 import { STACK } from './stack'
 
 const REPO = 'https://github.com/guasam/electron-react-app'
@@ -46,18 +48,27 @@ export function Sidebar({ active, onSelect }: { active: string; onSelect: (id: s
 
       <div className="flex-1" />
 
-      <div className="mx-3.5 rounded-[9px] border border-border bg-muted px-3.25 py-3">
+      <button
+        onClick={() => onSelect(DEMO_ID)}
+        className={cn(
+          'mx-3.5 rounded-[9px] border px-3.25 py-3 text-left transition-colors',
+          active === DEMO_ID
+            ? 'border-brand/50 bg-brand-soft'
+            : 'border-border bg-muted hover:border-brand/40 hover:bg-brand-soft/40'
+        )}
+      >
         <div className="flex items-center gap-2">
           <span className="relative flex size-1.5">
-            <span className="absolute inline-flex size-full animate-ping rounded-full bg-success opacity-60" />
-            <span className="relative inline-flex size-1.5 rounded-full bg-success" />
+            <span className="absolute inline-flex size-full animate-ping rounded-full bg-brand opacity-60" />
+            <span className="relative inline-flex size-1.5 rounded-full bg-brand" />
           </span>
-          <span className="font-mono text-[10px] font-medium tracking-[0.04em] text-foreground/80">
-            IPC BRIDGE LIVE
-          </span>
+          <span className="font-mono text-[10px] font-medium tracking-[0.04em] text-foreground/80">SEE IT RUNNING</span>
         </div>
-        <div className="mt-1.5 font-mono text-[10px] leading-normal text-muted-foreground">main ↔ renderer, typed</div>
-      </div>
+        <div className="mt-1.5 flex items-center justify-between gap-2 font-mono text-[10px] leading-normal text-muted-foreground">
+          six live examples
+          <ArrowRight className="size-3" />
+        </div>
+      </button>
 
       <div className="flex items-center justify-between px-4.5 pt-3 font-mono text-[10px] text-muted-foreground">
         <span>ready to build</span>
