@@ -5,6 +5,7 @@ import { PAGES } from './registry'
 import { Sidebar } from './components/sidebar'
 import { CodeDrawer } from './components/code-drawer'
 import { Toaster, useToasts } from './components/toast'
+import { Presence } from './components/presence'
 
 /**
  * The playground: sidebar + capability, with an overlay code drawer for the source behind each one.
@@ -45,6 +46,7 @@ export function Playground() {
       </div>
 
       <Toaster />
+      <Presence page={active} />
     </div>
   )
 }

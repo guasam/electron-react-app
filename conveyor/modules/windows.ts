@@ -8,4 +8,6 @@ export const windowsModule = defineModule({
     ctx.openWindow(input)
   }),
   count: query(({ ctx }) => ctx.windows.all().length),
+  // This window's identity — the presence store keys ghost cursors by it.
+  id: query(({ ctx }) => ctx.window?.id ?? -1),
 })

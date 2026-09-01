@@ -11,6 +11,7 @@ import { windowsModule } from './modules/windows'
 import { notifyModule } from './modules/notify'
 import { tasksModule } from './modules/tasks'
 import { sharedStore } from './stores/shared'
+import { presenceStore } from './stores/presence'
 
 /**
  * The app's whole IPC surface — modules, stores, context, global middleware — registered in one
@@ -36,7 +37,7 @@ export const router = createRouter(
   {
     createContext: () => ({ appStartedAt: APP_STARTED_AT, windows, openWindow: openAppWindow }),
     use: [devLogger], // per-call timing in dev, a no-op in packaged builds
-    stores: [sharedStore],
+    stores: [sharedStore, presenceStore],
   }
 )
 
@@ -45,4 +46,7 @@ export type AppRouter = typeof router
 /** Wire per-window push events. Call once per created window. */
 export function setupEvents(win: BrowserWindow): void {
   setupWindowEvents(win)
+  // Trusted main-side dispatch: a closed window must not leave its ghost cursor behind.
+  const id = win.id
+  win.on('closed', () => router.stores.presence.dispatch('leave', id))
 }
