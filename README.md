@@ -44,7 +44,7 @@ cross-window state.
 | --------------------------- | ------------------------------------------------------------------------------ |
 | **Conveyor**                | Type-safe IPC: queries, commands, streams, events — end-to-end inference       |
 | **Cross-Window Stores**     | Main-owned state synced live across every window, with opt-in persistence      |
-| **Demo Branch**             | Live playground of every primitive on the `demo` branch, main stays minimal    |
+| **Conveyor Playground**     | This branch: interactive demo of every primitive (`main` is the minimal shell) |
 | **Sandboxed Renderer**      | `sandbox: true` out of the box — the conveyor preload is sandbox-compatible    |
 | **Custom Titlebar & Menus** | Style the window titlebar and menus as you want                                |
 | **Clean Project Structure** | Separation of main and renderer processes                                      |
@@ -79,23 +79,20 @@ npm install
 npm run dev
 ```
 
-This starts Electron with hot-reload. `main` is deliberately minimal — a themed window frame,
-titlebar, menus, and the typed IPC layer — so you can start building your app on top of it
-immediately.
-
-### Try the demo
-
-Want to see everything the stack can do first? The **`demo`** branch is an interactive
+This starts Electron with hot-reload. You are on the **`demo`** branch — an interactive
 playground of every IPC primitive (cross-window state, streaming, background tasks, middleware),
-with the real source behind each demo:
+with the real source behind each demo (hit "View code").
+
+### Ready to build?
+
+`main` is the same template without the playground: a themed window frame, titlebar, menus, and
+the typed IPC layer, ready to build on:
 
 ```bash
-git switch demo
+git switch main
 npm install
 npm run dev
 ```
-
-Switch back to `main` (and re-run `npm install`) when you're ready to build.
 
 <br />
 
@@ -228,7 +225,7 @@ const { add, increment } = useConveyorActions(sharedStore)
 
 Failures re-throw in the renderer as `ConveyorError` with a stable `code` — including custom codes
 thrown by your handlers (`throw new ConveyorError('LOCKED', '...')`). Branch on `err.code`, never
-on message strings. See the `demo` branch's **Middleware** page for a working example.
+on message strings. See the playground's **Middleware** page for a working example.
 
 📖 **Full API documentation: [electron-conveyor](https://github.com/guasam/electron-conveyor)**
 
@@ -275,11 +272,14 @@ To add, remove or modify menu items, update the following file:
 
 - **React application** that runs in the browser window
 - `app/shell/` — titlebar, menus, window frame, theme
+- `app/pages/` — the playground's capability pages
+- `app/components/` — shared UI (`ui/` is stock shadcn; the rest is the playground's)
 
 #### `conveyor/` - The IPC Surface
 
 - `conveyor/init.ts` — authoring primitives bound to the app's context
 - `conveyor/modules/` — feature modules (**main-process only**; the renderer imports only `type AppRouter`)
+- `conveyor/stores/` — cross-window store definitions (pure, imported by both processes)
 - `conveyor/router.ts` — the single registration point (modules, stores, middleware, context)
 - `conveyor/client.ts` — the typed renderer client with hooks
 
