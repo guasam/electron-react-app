@@ -3,6 +3,12 @@ import { electronApp, optimizer } from '@electron-toolkit/utils'
 import { openAppWindow } from './app'
 import { registerResourcesProtocol } from './protocols'
 
+// Chromium only auto-detects a keyring on desktops it recognizes, so on anything else (Hyprland,
+// sway, bare WMs) safeStorage silently degrades to `basic_text` and reports itself unavailable.
+// Naming the backend opts back in where a secret service is actually running; if none is, Chromium
+// falls back on its own. Must run before the app is ready.
+if (process.platform === 'linux') app.commandLine.appendSwitch('password-store', 'gnome-libsecret')
+
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
