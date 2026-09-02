@@ -6,6 +6,14 @@ cross-window state.
 
 <br />
 
+<p align="center">
+    <img src="app/assets/era-conveyor.webp" target="_blank" />
+</p>
+
+<br />
+
+<p align="center">
+
 ![Electron](https://img.shields.io/badge/v43.5.1-Electron-blue) &nbsp;
 ![React](https://img.shields.io/badge/v19.2.8-React-blue) &nbsp;
 ![TypeScript](https://img.shields.io/badge/v6.0.3-TypeScript-blue) &nbsp;
@@ -14,10 +22,6 @@ cross-window state.
 ![Tailwind](https://img.shields.io/badge/v4.3.3-Tailwind-blue) &nbsp;
 ![Conveyor](https://img.shields.io/badge/v0.4.0-Conveyor-ff5c3a)
 
-<br />
-
-<p align="center">
-    <img src="app/assets/era-conveyor.webp" target="_blank" />
 </p>
 
 <br />

@@ -11,7 +11,9 @@
   "scripts": {
     "dev": "cross-env ELECTRON_DISABLE_SANDBOX=1 electron-vite dev -w",
     "format": "prettier --write --list-different .",
+    "format:check": "prettier --check .",
     "lint": "eslint . --ext .ts,.tsx --fix",
+    "lint:check": "eslint . --ext .ts,.tsx",
     "start": "electron-vite preview",
     "postinstall": "electron-builder install-app-deps",
     "vite:build:app": "electron-vite build",
