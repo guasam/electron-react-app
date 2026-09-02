@@ -6,40 +6,51 @@ All notable changes to the electron-react-app (ERA) are listed here.
 
 ## v13.0.0
 
-- 🌱 **Two branches.** `main` is now the minimal shell: window frame, titlebar, menu, theming, and
-  a typed IPC bridge, and nothing else. The interactive playground moved to the `demo` branch,
-  which builds on `main` and merges it forward. Structural changes land on `main` first.
-- 🚀 **Rebuilt on `electron-conveyor@0.4.0`** — the IPC surface is five primitives:
-  `query` / `command` / `stream` / `event` / `defineStore`
-  - The `procedure()` builder is gone; middleware lives on reusable bases (`query.use(guard)`)
-  - React hooks moved onto the client proxy: `conveyor.system.info.useQuery()` — query keys are
-    derived from the call path, never written by hand; typed `invalidate()`
-  - Module ids come from the router keys (`createRouter({ window: windowModule, ... })`)
-  - Stores register through the router, validate action payloads with schemas (schema-first
-    typing), and support `persist: true`
-  - Errors carry app-defined codes across the boundary, so the renderer branches on `err.code`
-  - Router-global `devLogger` middleware prints per-call timings in dev
-- 👋 **A welcome screen** that tours the stack, and is built to be deleted: it lives entirely in
-  `app/components/welcome`, nothing else imports it, and it adds no conveyor modules. Removing the
-  folder and the `<Welcome />` line in `app.tsx` leaves an empty window with the shell intact.
-- 🎨 Theme changes cross-fade the window through a view transition rather than swapping every
-  colour in a single frame.
-- 🧯 The error boundary now leads with the error's message, adds React's component stack in a tab
-  of its own, dims dependency frames, and offers copy, retry, and reload.
-- 🔒 Renderer runs with `sandbox: true` (the conveyor preload is sandbox-compatible;
-  electron-conveyor is bundled into the preload since a sandboxed preload cannot resolve
-  node_modules)
-- 🐧 Linux: the keychain backend is named explicitly, so `safeStorage` works on desktops Chromium
-  does not recognise instead of silently degrading to plaintext
-- Removed the `demoHost` indirection: procedures reach the window manager via `ctx.windows` /
-  `ctx.openWindow`
-- Added `npm run typecheck`; README rewritten around the current API
+**Structure**
 
-<br>
+- `main` is the minimal shell: a window frame, titlebar, menu, theming, and a typed IPC bridge.
+  The interactive playground lives on the `demo` branch, which builds on `main` and merges it
+  forward.
+- A welcome screen tours the stack on first launch. It is built to be removed: everything lives in
+  `app/components/welcome`, nothing else imports it, and it registers no IPC of its own.
+
+**Inter-process communication**
+
+Built on `electron-conveyor@0.4.0`. A feature is defined once in the main process and the
+renderer's client is inferred from it, so there are no channel strings and no client to write.
+
+- Five primitives: `query`, `command`, `stream`, `event`, and `defineStore`
+- React hooks hang off the client itself (`conveyor.system.info.useQuery()`), with query keys
+  derived from the call path rather than written by hand
+- Middleware attaches to reusable bases and can narrow the context for everything below it
+- Cross-window stores validate their action payloads and can persist to disk
+- Failures cross the boundary with a stable code, so the renderer branches on `err.code` rather
+  than on message text
+- `devLogger` reports per-call timings in development
+
+**Interface**
+
+- Theme changes cross-fade the window through a view transition instead of swapping every colour
+  in a single frame
+- The error boundary leads with the message, shows React's component stack alongside the error
+  stack, dims dependency frames, and offers copy, retry, and reload
+
+**Platform**
+
+- The renderer runs sandboxed. electron-conveyor is bundled into the preload, because a sandboxed
+  preload cannot resolve `node_modules`.
+- On Linux the keychain backend is named explicitly, so `safeStorage` works on desktops Chromium
+  does not recognise rather than silently falling back to plaintext
+
+**Tooling**
+
+- `npm run typecheck`, `npm run lint:check`, and `npm run format:check`
+- GitHub Actions verifies every push to `main`, then builds and packages on Linux, macOS, and
+  Windows
 
 ## v12.1.0
 
-- 🎉 Electron version upgraded to `v40.1.0`
+- Electron version upgraded to `v40.1.0`
 - Update shadcn components in use
 - Added `npm run format` command for prettier code formatting
 - Refactor electron-builder configuration
@@ -50,44 +61,10 @@ All notable changes to the electron-react-app (ERA) are listed here.
 - Upgraded dependencies to latest usable versions:
 
 <details>
-<summary><strong>📋 View Dependency Updates</strong></summary>
+<summary><strong>View Dependency Updates</strong></summary>
 
-```bash
-↑ @electron-toolkit/eslint-config-prettier@3.0.0
-↑ @electron-toolkit/tsconfig@2.0.0
-↑ @eslint/js@10.0.1
-↑ @rushstack/eslint-patch@1.15.0
-↑ @tailwindcss/vite@4.1.18
-↑ @types/node@25.2.3
-↑ @types/react@19.2.14
-↑ @types/react-dom@19.2.3
-↑ @vitejs/plugin-react@5.1.4
-↑ cross-env@10.1.0
-↑ electron@40.4.0
-↑ electron-builder@26.7.0
-↑ electron-vite@5.0.0
-↑ eslint@10.0.0
-↑ eslint-plugin-react@7.37.5
-↑ eslint-plugin-react-hooks@7.0.1
-↑ framer-motion@12.34.0
-↑ npm-run-all@4.1.5
-↑ prettier@3.8.1
-↑ react@19.2.4
-↑ react-dom@19.2.4
-↑ tailwindcss@4.1.18
-↑ typescript@5.9.3
-↑ typescript-eslint@8.55.0
-↑ vite@7.3.1
-↑ @electron-toolkit/preload@3.0.2
-↑ @electron-toolkit/utils@4.0.0
-↑ @radix-ui/react-slot@1.2.4
-↑ @radix-ui/react-switch@1.2.6
-↑ class-variance-authority@0.7.1
-↑ clsx@2.1.1
-↑ lucide-react@0.563.0
-↑ tailwind-merge@3.4.0
-↑ tw-animate-css@1.4.0
-↑ zod@4.3.6
+```bash @electron-toolkit/eslint-config-prettier@3.0.0 @electron-toolkit/tsconfig@2.0.0 @eslint/js@10.0.1 @rushstack/eslint-patch@1.15.0 @tailwindcss/vite@4.1.18 @types/node@25.2.3 @types/react@19.2.14 @types/react-dom@19.2.3 @vitejs/plugin-react@5.1.4 cross-env@10.1.0 electron@40.4.0 electron-builder@26.7.0 electron-vite@5.0.0 eslint@10.0.0 eslint-plugin-react@7.37.5 eslint-plugin-react-hooks@7.0.1 framer-motion@12.34.0 npm-run-all@4.1.5 prettier@3.8.1 react@19.2.4 react-dom@19.2.4 tailwindcss@4.1.18 typescript@5.9.3 typescript-eslint@8.55.0 vite@7.3.1 @electron-toolkit/preload@3.0.2 @electron-toolkit/utils@4.0.0 @radix-ui/react-slot@1.2.4 @radix-ui/react-switch@1.2.6 class-variance-authority@0.7.1 clsx@2.1.1 lucide-react@0.563.0 tailwind-merge@3.4.0 tw-animate-css@1.4.0 zod@4.3.6
+
 ```
 
 </details>
@@ -96,8 +73,8 @@ All notable changes to the electron-react-app (ERA) are listed here.
 
 ## v12.0.0
 
-- 🎉 Electron version upgraded to `v37`
-- ⛓️ **Conveyor System** - Type-safe Inter-Process Communication
+- Electron version upgraded to `v37`
+- **Conveyor System** - Type-safe Inter-Process Communication
   - Implemented comprehensive type-safe IPC system with Zod validation
   - Added modular API architecture for clean separation of concerns
   - Integrated global type declarations for seamless TypeScript support
@@ -105,17 +82,17 @@ All notable changes to the electron-react-app (ERA) are listed here.
   - Added comprehensive documentation and usage examples
   - Implemented runtime validation for enhanced security and reliability
 
-- 🏗️ **Project Structure Optimization**
+- **Project Structure Optimization**
   - Reorganized file structure for better maintainability
   - Consolidated shared utilities and components
   - Improved separation of concerns between main and renderer processes
   - Enhanced module organization and import paths
 
-- ⚡ **Component Performance Optimization**
+- **Component Performance Optimization**
   - Optimized React component rendering and re-renders
   - Trimmed down component bundle sizes
 
-- 🛠️ Developer Experience
+- Developer Experience
   - Updated TypeScript configuration for better type safety
   - Enhanced ESLint rules and code quality checks
   - Improved build process and error reporting
@@ -124,35 +101,14 @@ All notable changes to the electron-react-app (ERA) are listed here.
   - Added cross-env for cross-platform environment variable support
   - Using npm as the package manager for the project
 
-- 📦 Dependencies
+- Dependencies
   - Upgraded dependencies to latest versions:
 
 <details>
-<summary><strong>📋 View Dependency Updates</strong></summary>
+<summary><strong>View Dependency Updates</strong></summary>
 
-```bash
-↑ @eslint/js                   9.28.0 → 9.34.0
-↑ @rushstack/eslint-patch      1.11.0 → 1.12.0
-↑ @tailwindcss/vite            4.1.8  → 4.1.12
-↑ @types/node                  22.15.29 → 24.3.0
-↑ @types/react                 19.1.6  → 19.1.11
-↑ @types/react-dom             19.1.5  → 19.1.8
-↑ @vitejs/plugin-react         4.5.0   → 5.0.1
-↑ electron                     36.3.2  → 37.3.1
-↑ electron-vite                3.1.0   → 4.0.0
-↑ eslint                       9.28.0  → 9.34.0
-↑ framer-motion                12.15.0 → 12.23.12
-↑ prettier                     3.5.3   → 3.6.2
-↑ react                        19.1.0  → 19.1.1
-↑ react-dom                    19.1.0  → 19.1.1
-↑ tailwindcss                  4.1.8   → 4.1.12
-↑ typescript                   5.8.3   → 5.9.2
-↑ typescript-eslint            8.33.0  → 8.41.0
-↑ vite                         6.3.5   → 7.1.3
-↑ @radix-ui/react-switch       1.2.5   → 1.2.6
-↑ lucide-react                 0.511.0 → 0.541.0
-↑ tailwind-merge               3.3.0   → 3.3.1
-↑ tw-animate-css               1.3.2   → 1.3.7
+```bash @eslint/js                   9.28.0 9.34.0 @rushstack/eslint-patch      1.11.0 1.12.0 @tailwindcss/vite            4.1.8 4.1.12 @types/node                  22.15.29 24.3.0 @types/react                 19.1.6 19.1.11 @types/react-dom             19.1.5 19.1.8 @vitejs/plugin-react         4.5.0 5.0.1 electron                     36.3.2 37.3.1 electron-vite                3.1.0 4.0.0 eslint                       9.28.0 9.34.0 framer-motion                12.15.0 12.23.12 prettier                     3.5.3 3.6.2 react                        19.1.0 19.1.1 react-dom                    19.1.0 19.1.1 tailwindcss                  4.1.8 4.1.12 typescript                   5.8.3 5.9.2 typescript-eslint            8.33.0 8.41.0 vite                         6.3.5 7.1.3 @radix-ui/react-switch       1.2.5 1.2.6 lucide-react                 0.511.0 0.541.0 tailwind-merge               3.3.0 3.3.1 tw-animate-css               1.3.2 1.3.7
+
 ```
 
 </details>
@@ -161,15 +117,15 @@ All notable changes to the electron-react-app (ERA) are listed here.
 
 ## v11.0.0
 
-- 🎉 Electron version upgraded `v36`
-- 🎨 Integrated Shadcn UI Component System
+- Electron version upgraded `v36`
+- Integrated Shadcn UI Component System
   - Added new component library with Radix UI primitives
   - Implemented accessible and customizable components
   - Added TypeScript support for better developer experience
   - Integrated with Tailwind CSS for consistent styling
   - Added new component showcase in welcome kit
 
-- 🎨 Enhanced Design System
+- Enhanced Design System
   - Implemented new color system with CSS variables
   - Added new design tokens for consistent theming
   - Improved dark/light mode implementation
@@ -177,14 +133,14 @@ All notable changes to the electron-react-app (ERA) are listed here.
   - Enhanced typography system
   - Added new chart color palette
 
-- 🎨 Welcome Kit Improvements
+- Welcome Kit Improvements
   - Added Shadcn UI showcase section
   - Enhanced dark mode toggle
   - Added new icons and updated welcome component content
   - Updated welcome component styles to support light mode without dark class
   - Integrated dark mode toggle in WelcomeKit using Badge component
 
-- 🎨 Developer Experience
+- Developer Experience
   - Added new component configuration system
   - Improved TypeScript support
   - Enhanced component documentation
@@ -192,7 +148,7 @@ All notable changes to the electron-react-app (ERA) are listed here.
   - Fixed ESLint configuration issues
   - Implemented res:// protocol for app resources
 
-- 📦 Dependencies
+- Dependencies
   - Upgraded dependencies to latest versions:
 
 | Package                   | Version    |
@@ -218,8 +174,8 @@ All notable changes to the electron-react-app (ERA) are listed here.
 
 ## v10.2.0
 
-- 🎉 Electron version upgraded `v35.x.x`
-- 📦 Upgraded dependencies to latest versions:
+- Electron version upgraded `v35.x.x`
+- Upgraded dependencies to latest versions:
 
 | Package                            | Version    |
 | ---------------------------------- | ---------- |
@@ -253,22 +209,22 @@ All notable changes to the electron-react-app (ERA) are listed here.
 
 ## v10.0.0
 
-- 🚀 Major overhaul: Complete migration from Webpack to Vite
-- ⚡ Significantly improved build times and development experience
-- 🎨 Added TailwindCSS integration for modern styling
-- 🏗️ Restructured project files for better organization:
+- Major overhaul: Complete migration from Webpack to Vite
+- Significantly improved build times and development experience
+- Added TailwindCSS integration for modern styling
+- Restructured project files for better organization:
   - Moved renderer code to `app/` folder
   - Consolidated shared code in `lib/` folder
   - Moved main process code to `lib/main` folder
   - Moved preload code to `lib/preload` folder
-- 💅 Refreshed UI with new design system and components
-- 🌓 Enhanced dark/light mode implementation with smoother transitions
-- 📦 Updated IPC communication system for better security
-- 🔄 Added new welcome kit with interactive tutorial
-- ⚙️ Simplified configuration files and build scripts
-- 📊 Improved logging and error handling
-- 🛠️ Updated Electron to latest version `v31.2.2`
-- 📈 Upgraded dependencies to latest versions:
+- Refreshed UI with new design system and components
+- Enhanced dark/light mode implementation with smoother transitions
+- Updated IPC communication system for better security
+- Added new welcome kit with interactive tutorial
+- Simplified configuration files and build scripts
+- Improved logging and error handling
+- Updated Electron to latest version `v31.2.2`
+- Upgraded dependencies to latest versions:
 
 | Package              | Version   |
 | -------------------- | --------- |
@@ -286,7 +242,7 @@ All notable changes to the electron-react-app (ERA) are listed here.
 
 ## v8.1.0
 
-- 🎉 Electron version upgraded `v23.0.0`.
+- Electron version upgraded `v23.0.0`.
 - Using `eslint.config.json` as eslint configuration.
 - Tweaked app themes colors.
 - Upgraded outdated packages:
@@ -314,7 +270,7 @@ All notable changes to the electron-react-app (ERA) are listed here.
 
 ## v8.0.0
 
-- 🎉 Application UI and Themes (light/dark).
+- Application UI and Themes (light/dark).
 - Using latest Electron version `v28`
 - Changed app accent colors & added credits menu item.
 - Integrated `electron-window` components & modules in project's file structure.
@@ -413,16 +369,16 @@ Upgraded outdated packages:
 
 Upgraded outdated packages:
 
-| Package            | Version  |     |
-| ------------------ | -------- | --- |
-| electron           | `24.1.2` | ⬆️  |
-| @electron-forge    | `6.1.1`  | ⬆️  |
-| @typescript-eslint | `5.59.0` | ⬆️  |
-| eslint             | `8.39.0` | ⬆️  |
-| sass               | `1.62.0` | ⬆️  |
-| sass-loader        | `13.2.2` | ⬆️  |
-| typescript         | `5.0.4`  | ⬆️  |
-| webpack            | `5.80.0` | ⬆️  |
+| Package            | Version  |
+| ------------------ | -------- |
+| electron           | `24.1.2` |
+| @electron-forge    | `6.1.1`  |
+| @typescript-eslint | `5.59.0` |
+| eslint             | `8.39.0` |
+| sass               | `1.62.0` |
+| sass-loader        | `13.2.2` |
+| typescript         | `5.0.4`  |
+| webpack            | `5.80.0` |
 
 <br>
 
@@ -430,19 +386,19 @@ Upgraded outdated packages:
 
 Upgraded outdated packages:
 
-| Package            | Version    |     |
-| ------------------ | ---------- | --- |
-| electron           | `23.2.0`   | ⬆️  |
-| eslint             | `8.36.0`   | ⬆️  |
-| sass               | `1.60.0`   | ⬆️  |
-| sass-loader        | `13.2.1`   | ⬆️  |
-| style-loader       | `3.3.2`    | ⬆️  |
-| typescript         | `5.0.2`    | ⬆️  |
-| webpack            | `5.76.3`   | ⬆️  |
-| @types/node        | `18.15.10` | ⬆️  |
-| @types/react       | `18.0.29`  | ⬆️  |
-| @types/react-dom   | `18.0.11`  | ⬆️  |
-| @typescript-eslint | `5.56.0`   | ⬆️  |
+| Package            | Version    |
+| ------------------ | ---------- |
+| electron           | `23.2.0`   |
+| eslint             | `8.36.0`   |
+| sass               | `1.60.0`   |
+| sass-loader        | `13.2.1`   |
+| style-loader       | `3.3.2`    |
+| typescript         | `5.0.2`    |
+| webpack            | `5.76.3`   |
+| @types/node        | `18.15.10` |
+| @types/react       | `18.0.29`  |
+| @types/react-dom   | `18.0.11`  |
+| @typescript-eslint | `5.56.0`   |
 
 <br>
 
@@ -450,21 +406,21 @@ Upgraded outdated packages:
 
 Upgraded outdated packages:
 
-| Package            | Version   |     |
-| ------------------ | --------- | --- |
-| electron           | `23.1.2`  | ⬆️  |
-| eslint             | `8.35.0`  | ⬆️  |
-| sass               | `1.58.3`  | ⬆️  |
-| @types/node        | `18.14.6` | ⬆️  |
-| @types/react       | `18.0.28` | ⬆️  |
-| @types/react-dom   | `18.0.11` | ⬆️  |
-| @typescript-eslint | `5.54.0`  | ⬆️  |
+| Package            | Version   |
+| ------------------ | --------- |
+| electron           | `23.1.2`  |
+| eslint             | `8.35.0`  |
+| sass               | `1.58.3`  |
+| @types/node        | `18.14.6` |
+| @types/react       | `18.0.28` |
+| @types/react-dom   | `18.0.11` |
+| @typescript-eslint | `5.54.0`  |
 
 <br>
 
 ## v7.3.0
 
-- 🎉 Electron version upgraded `v23.0.0`
+- Electron version upgraded `v23.0.0`
 - Upgraded outdated packages:
   - `electron` upgraded to `v23.0.0`
   - `@electron-forge` deps upgraded to `v6.0.5`
@@ -481,7 +437,7 @@ Upgraded outdated packages:
 
 ## v7.2.0
 
-- 🎉 Electron version upgraded `v22.0.0`
+- Electron version upgraded `v22.0.0`
 - Upgraded outdated packages:
   - `electron` upgraded to `v22.0.0`
   - `@electron-forge` deps upgraded to `v6.0.4`
@@ -498,7 +454,7 @@ Upgraded outdated packages:
 
 ## v7.1.0
 
-- 🎉 Electron version upgraded to `v21.2.0`
+- Electron version upgraded to `v21.2.0`
 - Fixed Devtools Console warning message caused by content policy.
 - Upgraded forge config plugins format to support latest version.
 - Disabled `sandbox` by default in application window.
@@ -520,8 +476,8 @@ Upgraded outdated packages:
 
 ## v7.0.0
 
-- 🥳 New layout for default application.
-- 🤖 Overhaul for dark/light themes with new colors.
+- New layout for default application.
+- Overhaul for dark/light themes with new colors.
 - Improved transition timing of title menus list.
 - Fixed native modules compiling issue with update to related webpack loader.
 - Updated forge `devContentSecurityPolicy` config for electron window.
@@ -551,7 +507,7 @@ Upgraded outdated packages:
 
 ## v6.1.0
 
-- 🎉 Electron version upgraded to `v19.0.6`
+- Electron version upgraded to `v19.0.6`
 - Using `misc/window` for custom window without git submodule.
 - Upgraded outdated deps:
   - `electron` upgraded to `v19.0.6`
@@ -575,9 +531,9 @@ Upgraded outdated packages:
 
 ## v6.0.0
 
-- 🙌🏻 New Layout for default application.
-- 🌑 Dark mode & 💡 Light Mode colors.
-- 🎉 Electron version upgraded to `v18.1.0`
+- New Layout for default application.
+- Dark mode & Light Mode colors.
+- Electron version upgraded to `v18.1.0`
 - Using `sass/scss` stylesheets by default for project (previously `less` was used).
 - Using `React Fast Refresh` for hot reloading, removed old `hot-loader`.
 - Titlebar Menus style overrides for improvements with rounded corners.
@@ -609,7 +565,7 @@ Upgraded outdated packages:
 
 ## v5.4.0
 
-- 🎉 Electron core upgraded `v17.0.1`
+- Electron core upgraded `v17.0.1`
 - Upgraded outdated deps:
   - `@hot-loader/react-dom` upgraded to `v17.0.2`
   - `webpack` upgraded to `v5.69.1`
@@ -637,7 +593,7 @@ Upgraded outdated packages:
 
 ## v5.2.0
 
-- 🎉 Electron core upgraded `v16`
+- Electron core upgraded `v16`
 - Upgraded outdated deps:
   - `@typescript-eslint` deps upgraded to `^5.5.0`
   - `eslint` upgraded to `^8.4.0`
@@ -676,7 +632,7 @@ Upgraded outdated packages:
 
 ## v4.2.0
 
-- 🎉 Electron core upgraded to version `v15`
+- Electron core upgraded to version `v15`
 - Application colors updated for vue environment
 - Fix eslint script
 - Default window background color updated.
@@ -691,7 +647,7 @@ Upgraded outdated packages:
 
 ## v4.1.0
 
-- 🎉 Electron core upgraded to version `v14`
+- Electron core upgraded to version `v14`
 - Update application style properties
 - Enable `nativeWindowOpen` for main window
 - Remove `enableRemoteModule` from main window
@@ -739,7 +695,7 @@ Upgraded outdated packages:
 
 ## v3.1.0
 
-- Electron core 🚀 upgraded to version 13.
+- Electron core upgraded to version 13.
 - Expose Webpack Ports settings in forge configuration.
 - Upgraded outdated packages :
   - `electron` upgraded to `^13.0.1`
