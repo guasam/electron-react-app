@@ -7,7 +7,7 @@ import { ConveyorError } from 'electron-conveyor/define'
 import { defineModule, stream, query, command } from '../init'
 
 // Gemini's free tier needs only a Google account (aistudio.google.com/apikey), no card, which is
-// what makes live mode reachable for anyone who clones this template.
+// what makes live mode reachable for anyone who clones this starter kit.
 const MODEL = 'gemini-2.5-flash'
 
 // ================================================================
@@ -81,7 +81,7 @@ async function* modelTokens(key: string, input: string, signal: AbortSignal) {
     config: {
       maxOutputTokens: 1024, // deliberately short: this is a demo chat, not a workhorse
       systemInstruction:
-        'You are the streaming demo inside an Electron template playground. ' +
+        'You are the streaming demo inside an Electron starter kit playground. ' +
         'Answer in a few short sentences, plain text only.',
       // 2.5-flash thinks by default, and thinking tokens aren't streamed — the demo would sit dead
       // for a second before the first word. Off means text starts arriving immediately.

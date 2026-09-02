@@ -1,26 +1,23 @@
 # Electron React App
 
-A modern Electron application template with React, Vite, TypeScript, and TailwindCSS — built
+A modern Electron starter kit with React, Vite, TypeScript, and TailwindCSS — built
 around **[electron-conveyor](https://github.com/guasam/electron-conveyor)** for type-safe IPC and
 cross-window state.
 
 <br />
 
-![Electron](https://img.shields.io/badge/v40.1.0-Electron-blue) &nbsp;
-![React](https://img.shields.io/badge/v19.2.4-React-blue) &nbsp;
-![TypeScript](https://img.shields.io/badge/v5.9.3-TypeScript-blue) &nbsp;
-![Vite](https://img.shields.io/badge/v7.3.1-Vite-blue) &nbsp;
+![Electron](https://img.shields.io/badge/v43.5.1-Electron-blue) &nbsp;
+![React](https://img.shields.io/badge/v19.2.8-React-blue) &nbsp;
+![TypeScript](https://img.shields.io/badge/v6.0.3-TypeScript-blue) &nbsp;
+![Vite](https://img.shields.io/badge/v7.3.6-Vite-blue) &nbsp;
 ![Shadcn](https://img.shields.io/badge/Shadcn-UI-blue) &nbsp;
-![Tailwind](https://img.shields.io/badge/v4.1.18-Tailwind-blue)
+![Tailwind](https://img.shields.io/badge/v4.3.3-Tailwind-blue) &nbsp;
+![Conveyor](https://img.shields.io/badge/v0.4.0-Conveyor-ff5c3a)
 
 <br />
 
 <p align="center">
-    <img src="app/assets/era-preview.png" target="_blank" />
-</p>
-
-<p align="center">
-    <a href="https://imgur.com/B5pGkDk">Watch Video Preview</a>
+    <img src="app/assets/era-conveyor.webp" target="_blank" />
 </p>
 
 <br />
@@ -44,7 +41,7 @@ cross-window state.
 | --------------------------- | ------------------------------------------------------------------------------ |
 | **Conveyor**                | Type-safe IPC: queries, commands, streams, events — end-to-end inference       |
 | **Cross-Window Stores**     | Main-owned state synced live across every window, with opt-in persistence      |
-| **Conveyor Playground**     | This branch: interactive demo of every primitive (`main` is the minimal shell) |
+| **Demo Branch**             | Live playground of every primitive on the `demo` branch, main stays minimal    |
 | **Sandboxed Renderer**      | `sandbox: true` out of the box — the conveyor preload is sandbox-compatible    |
 | **Custom Titlebar & Menus** | Style the window titlebar and menus as you want                                |
 | **Clean Project Structure** | Separation of main and renderer processes                                      |
@@ -79,26 +76,42 @@ npm install
 npm run dev
 ```
 
-This starts Electron with hot-reload. You are on the **`demo`** branch — an interactive
-playground of every IPC primitive (cross-window state, streaming, background tasks, middleware),
-with the real source behind each demo (hit "View code").
+This starts Electron with hot-reload. `main` is deliberately minimal — a themed window frame,
+titlebar, menus, and the typed IPC layer — so you can start building your app on top of it
+immediately.
 
-### Ready to build?
+### Removing the welcome screen
 
-`main` is the same template without the playground: a themed window frame, titlebar, menus, and
-the typed IPC layer, ready to build on:
+The window opens on a short tour of the stack. It is the one piece meant to be thrown away, and it
+is built so that costs nothing: it lives entirely in `app/components/welcome`, nothing else imports
+it, and it adds no IPC modules of its own.
 
 ```bash
-git switch main
+rm -rf app/components/welcome
+```
+
+Then drop the `<Welcome />` line and its import from `app/app.tsx`. What's left is an empty window
+with the shell still around it, ready for your app.
+
+### Try the demo
+
+Want to see everything the stack can do first? The **`demo`** branch is an interactive
+playground of every IPC primitive (cross-window state, streaming, background tasks, middleware),
+with the real source behind each demo:
+
+```bash
+git switch demo
 npm install
 npm run dev
 ```
+
+Switch back to `main` (and re-run `npm install`) when you're ready to build.
 
 <br />
 
 ## Conveyor — Inter-Process Communication
 
-The template's IPC is powered by [electron-conveyor](https://github.com/guasam/electron-conveyor).
+IPC is powered by [electron-conveyor](https://github.com/guasam/electron-conveyor).
 One definition in main is the single source of truth for a feature; the renderer client is
 **inferred** from it — no channel strings, no hand-written API classes, no query keys.
 
@@ -162,7 +175,7 @@ Outside React, every member is a plain typed call: `await conveyor.notes.list()`
 ### Handler context
 
 Every handler receives `ctx`: the calling `window` and `sender`, plus the app context defined in
-`conveyor/init.ts` (this template provides `appStartedAt`, the `windows` manager, and
+`conveyor/init.ts` (this starter kit provides `appStartedAt`, the `windows` manager, and
 `openWindow`). Middleware can guard and widen it:
 
 ```ts
@@ -225,7 +238,7 @@ const { add, increment } = useConveyorActions(sharedStore)
 
 Failures re-throw in the renderer as `ConveyorError` with a stable `code` — including custom codes
 thrown by your handlers (`throw new ConveyorError('LOCKED', '...')`). Branch on `err.code`, never
-on message strings. See the playground's **Middleware** page for a working example.
+on message strings. See the `demo` branch's **Middleware** page for a working example.
 
 📖 **Full API documentation: [electron-conveyor](https://github.com/guasam/electron-conveyor)**
 
@@ -233,7 +246,7 @@ on message strings. See the playground's **Middleware** page for a working examp
 
 ## Custom Window Components
 
-This template includes a custom window implementation with:
+This starter kit includes a custom window implementation with:
 
 - Custom titlebar with app icon
 - Window control buttons (minimize, maximize, close)
@@ -272,14 +285,11 @@ To add, remove or modify menu items, update the following file:
 
 - **React application** that runs in the browser window
 - `app/shell/` — titlebar, menus, window frame, theme
-- `app/pages/` — the playground's capability pages
-- `app/components/` — shared UI (`ui/` is stock shadcn; the rest is the playground's)
 
 #### `conveyor/` - The IPC Surface
 
 - `conveyor/init.ts` — authoring primitives bound to the app's context
 - `conveyor/modules/` — feature modules (**main-process only**; the renderer imports only `type AppRouter`)
-- `conveyor/stores/` — cross-window store definitions (pure, imported by both processes)
 - `conveyor/router.ts` — the single registration point (modules, stores, middleware, context)
 - `conveyor/client.ts` — the typed renderer client with hooks
 

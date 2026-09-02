@@ -6,23 +6,34 @@ All notable changes to the electron-react-app (ERA) are listed here.
 
 ## v13.0.0
 
-- 🚀 **Conveyor v3** (`electron-conveyor@0.4.0`) — the IPC surface is rebuilt around five
-  primitives: `query` / `command` / `stream` / `event` / `defineStore`
+- 🌱 **Two branches.** `main` is now the minimal shell: window frame, titlebar, menu, theming, and
+  a typed IPC bridge, and nothing else. The interactive playground moved to the `demo` branch,
+  which builds on `main` and merges it forward. Structural changes land on `main` first.
+- 🚀 **Rebuilt on `electron-conveyor@0.4.0`** — the IPC surface is five primitives:
+  `query` / `command` / `stream` / `event` / `defineStore`
   - The `procedure()` builder is gone; middleware lives on reusable bases (`query.use(guard)`)
   - React hooks moved onto the client proxy: `conveyor.system.info.useQuery()` — query keys are
     derived from the call path, never written by hand; typed `invalidate()`
   - Module ids come from the router keys (`createRouter({ window: windowModule, ... })`)
   - Stores register through the router, validate action payloads with schemas (schema-first
-    typing), and support `persist: true` — the shared demo store now survives restarts
-  - Errors carry app-defined codes across the boundary (see the Middleware demo's `LOCKED`)
+    typing), and support `persist: true`
+  - Errors carry app-defined codes across the boundary, so the renderer branches on `err.code`
   - Router-global `devLogger` middleware prints per-call timings in dev
-- 🔒 Renderer now runs with `sandbox: true` (the conveyor preload is sandbox-compatible;
+- 👋 **A welcome screen** that tours the stack, and is built to be deleted: it lives entirely in
+  `app/components/welcome`, nothing else imports it, and it adds no conveyor modules. Removing the
+  folder and the `<Welcome />` line in `app.tsx` leaves an empty window with the shell intact.
+- 🎨 Theme changes cross-fade the window through a view transition rather than swapping every
+  colour in a single frame.
+- 🧯 The error boundary now leads with the error's message, adds React's component stack in a tab
+  of its own, dims dependency frames, and offers copy, retry, and reload.
+- 🔒 Renderer runs with `sandbox: true` (the conveyor preload is sandbox-compatible;
   electron-conveyor is bundled into the preload since a sandboxed preload cannot resolve
   node_modules)
-- 🧹 `npm run strip-demo` — one command removes the playground and leaves the minimal shell
+- 🐧 Linux: the keychain backend is named explicitly, so `safeStorage` works on desktops Chromium
+  does not recognise instead of silently degrading to plaintext
 - Removed the `demoHost` indirection: procedures reach the window manager via `ctx.windows` /
   `ctx.openWindow`
-- Added `npm run typecheck`; README rewritten around the v3 API
+- Added `npm run typecheck`; README rewritten around the current API
 
 <br>
 

@@ -130,4 +130,18 @@
   ::-webkit-scrollbar-corner {
     background: transparent;
   }
+
+  /* Theme flips cross-fade rather than snap — see `withTransition` in shell/theme-store. */
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation-duration: 220ms;
+    animation-timing-function: ease;
+  }
+
+  /* Held only across a theme flip: per-element colour transitions would lag the snapshot. */
+  .theme-switching *,
+  .theme-switching *::before,
+  .theme-switching *::after {
+    transition: none !important;
+  }
 }
