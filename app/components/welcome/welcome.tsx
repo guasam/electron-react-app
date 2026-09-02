@@ -6,7 +6,7 @@ import { DemoPanel } from './demo-panel'
 import { STACK } from './stack'
 
 /**
- * The starter's welcome screen — a short tour of what this template is built on.
+ * The welcome screen — a short tour of what this starter kit is built on.
  *
  * Nothing else in the app imports from this folder, so deleting `app/components/welcome` and the
  * `<Welcome />` line in `app.tsx` leaves the bare shell behind, with nothing to clean up after.
