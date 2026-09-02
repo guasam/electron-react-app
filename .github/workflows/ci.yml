@@ -1,0 +1,65 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  # Lets a run be triggered by hand from the Actions tab, which is how you check a
+  # workflow change without pushing to main.
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+defaults:
+  run:
+    # Windows runners default to PowerShell, which would make the matrix three different
+    # shells running the same steps. Git Bash ships on the Windows image, so this keeps
+    # every platform executing identically.
+    shell: bash
+
+env:
+  # electron-builder otherwise hunts for a signing identity on macOS and fails the job.
+  # Unpacked builds are never shipped, so there is nothing to sign.
+  CSC_IDENTITY_AUTO_DISCOVERY: false
+
+jobs:
+  verify:
+    name: Verify
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm run lint:check
+      - run: npm run format:check
+
+  build:
+    name: Build (${{ matrix.os }})
+    # Gated on verify so three matrix jobs do not spend runner time on a typo.
+    needs: verify
+    strategy:
+      # One platform failing should not hide the state of the other two.
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      # Compiles main, preload and renderer. Catches path-separator and filename-case
+      # bugs that a single dev machine never sees.
+      - run: npm run vite:build:app
+      # `--dir` produces an unpacked app and skips every packaging target, so no
+      # installers, no signing, and no snapcraft on the Linux runner.
+      - run: npm run electron:build:dir
