@@ -33,11 +33,13 @@ export function Titlebar({ title = 'Electron React App' }: { title?: string }) {
     <header
       className={cn(
         'relative flex h-10 shrink-0 items-center border-b border-border bg-card select-none [-webkit-app-region:drag]',
-        isMac && 'pl-16'
+        isMac && 'pl-20'
       )}
     >
       <div className="flex items-center gap-2.5 pl-3 [-webkit-app-region:no-drag]">
-        <span className="size-3.25 rounded-lg bg-brand ring-[3px] ring-brand/20" />
+        {/* The native traffic lights already anchor the left edge on macOS, where a same-sized dot
+            beside them just reads as a fourth window control. */}
+        {!isMac && <span className="size-3.25 rounded-lg bg-brand ring-[3px] ring-brand/20" />}
         {menuVisible && <TitlebarMenu />}
       </div>
 
