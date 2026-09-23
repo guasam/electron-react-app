@@ -4,9 +4,13 @@ A modern Electron starter kit with React, Vite, TypeScript and TailwindCSS, buil
 **[electron-conveyor](https://github.com/guasam/electron-conveyor)** for type-safe IPC and
 cross-window state.
 
+<br />
+
 <p align="center">
     <img src="app/assets/era-conveyor.png" width="1141" alt="Electron React App" />
 </p>
+
+<br />
 
 <div align="center">
 
