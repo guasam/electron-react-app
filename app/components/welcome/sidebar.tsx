@@ -18,8 +18,9 @@ export function Sidebar({ active, onSelect }: { active: string; onSelect: (id: s
       </div>
 
       <div className="flex flex-col gap-px px-2">
-        {STACK.map((entry, i) => {
+        {STACK.map((entry) => {
           const isActive = active === entry.id
+          const Icon = entry.icon
           return (
             <button
               key={entry.id}
@@ -28,18 +29,11 @@ export function Sidebar({ active, onSelect }: { active: string; onSelect: (id: s
                 'relative flex items-center gap-2.75 rounded-[7px] px-2.5 py-2.25 text-[14px] transition-colors',
                 isActive
                   ? 'bg-brand-soft text-foreground'
-                  : 'text-muted-foreground hover:bg-muted hover:text-foreground'
+                  : 'text-muted-foreground hover:bg-muted hover:text-foreground cursor-pointer'
               )}
             >
               {isActive && <span className="absolute top-2.25 bottom-2.25 left-0 w-0.5 rounded-full bg-brand" />}
-              <span
-                className={cn(
-                  'w-3.5 flex-none font-mono text-[9.5px] font-medium',
-                  isActive ? 'text-brand' : 'text-muted-foreground/50'
-                )}
-              >
-                {String(i).padStart(2, '0')}
-              </span>
+              <Icon className={cn('size-3.5 flex-none', isActive ? 'text-brand' : 'text-muted-foreground/50')} />
               {entry.label}
             </button>
           )

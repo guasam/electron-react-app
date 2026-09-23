@@ -1,28 +1,27 @@
 # Electron React App
 
-A modern Electron starter kit with React, Vite, TypeScript, and TailwindCSS — built
-around **[electron-conveyor](https://github.com/guasam/electron-conveyor)** for type-safe IPC and
+A modern Electron starter kit with React, Vite, TypeScript and TailwindCSS, built around
+**[electron-conveyor](https://github.com/guasam/electron-conveyor)** for type-safe IPC and
 cross-window state.
 
 <br />
 
 <p align="center">
-    <img src="app/assets/era-conveyor.webp" target="_blank" />
+    <img src="app/assets/era-conveyor.png" width="1141" alt="Electron React App" />
 </p>
 
 <br />
 
-<p align="center">
+<div align="center">
 
-![Electron](https://img.shields.io/badge/v43.5.1-Electron-blue) &nbsp;
-![React](https://img.shields.io/badge/v19.2.8-React-blue) &nbsp;
-![TypeScript](https://img.shields.io/badge/v6.0.3-TypeScript-blue) &nbsp;
-![Vite](https://img.shields.io/badge/v7.3.6-Vite-blue) &nbsp;
-![Shadcn](https://img.shields.io/badge/Shadcn-UI-blue) &nbsp;
-![Tailwind](https://img.shields.io/badge/v4.3.3-Tailwind-blue) &nbsp;
-![Conveyor](https://img.shields.io/badge/v0.4.0-Conveyor-ff5c3a)
+![Electron](https://img.shields.io/badge/Electron-v43.5.1-blue) &nbsp;
+![React](https://img.shields.io/badge/React-v19.2.8-blue) &nbsp;
+![TypeScript](https://img.shields.io/badge/TypeScript-v6.0.3-blue) &nbsp;
+![Vite](https://img.shields.io/badge/Vite-v7.3.6-blue) &nbsp;
+![Tailwind](https://img.shields.io/badge/Tailwind-v4.3.3-blue) &nbsp;
+![Conveyor](https://img.shields.io/badge/Conveyor-v0.4.0-ff5c3a)
 
-</p>
+</div>
 
 <br />
 
@@ -39,69 +38,51 @@ cross-window state.
 
 <br />
 
-## In-Built Features
+## What you get, built in
 
-| Feature                     | Description                                                                    |
-| --------------------------- | ------------------------------------------------------------------------------ |
-| **Conveyor**                | Type-safe IPC: queries, commands, streams, events — end-to-end inference       |
-| **Cross-Window Stores**     | Main-owned state synced live across every window, with opt-in persistence      |
-| **Demo Branch**             | Live playground of every primitive on the `demo` branch, main stays minimal    |
-| **Sandboxed Renderer**      | `sandbox: true` out of the box — the conveyor preload is sandbox-compatible    |
-| **Custom Titlebar & Menus** | Style the window titlebar and menus as you want                                |
-| **Clean Project Structure** | Separation of main and renderer processes                                      |
-| **Resources Protocol**      | Access local file resources via `res://` protocol                              |
-| **Import Path Aliases**     | Keep your imports organized and clean                                          |
-| **Theme Switcher**          | Built-in theme switching for dark and light mode                               |
-| **Error Boundary**          | Built-in React error boundary with detailed error reporting                    |
-| **Code Formatting**         | Prettier and ESLint pre-configured for code quality                            |
-| **Hot Reload**              | Lightning-fast development with Vite's HMR                                     |
-| **VS Code Debugging**       | Pre-configured launch configurations for debugging main and renderer processes |
+| Feature                 | Description                                                                                                       |
+| ----------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| **Typed IPC**           | Queries, commands, streams and events with end-to-end inference. No channel strings, no hand-written API classes. |
+| **Cross-window stores** | Main-owned state synced live across every window, with opt-in persistence.                                        |
+| **Sandboxed renderer**  | `sandbox: true` out of the box. The conveyor preload is sandbox-compatible.                                       |
+| **Custom window shell** | Themed frame, titlebar and menu system you can style however you want.                                            |
+| **Demo branch**         | A live playground of every primitive on `demo`, while `main` stays minimal.                                       |
+| **The usual tooling**   | Vite HMR, Shadcn UI, Tailwind, ESLint and Prettier, VS Code debug configs, `res://` protocol, import aliases.     |
 
 <br />
 
-## Installation
+## Quick start
 
 ```bash
-# Clone the repository
 git clone https://github.com/guasam/electron-react-app
-
-# Change directory
 cd electron-react-app
 
-# Install dependencies (use any package manager: npm, yarn, pnpm, bun)
+# any package manager works: npm, yarn, pnpm, bun
 npm install
-```
-
-<br />
-
-## Development
-
-```bash
 npm run dev
 ```
 
-This starts Electron with hot-reload. `main` is deliberately minimal — a themed window frame,
-titlebar, menus, and the typed IPC layer — so you can start building your app on top of it
-immediately.
+That starts Electron with hot reload. `main` is deliberately minimal (a themed window frame,
+titlebar, menus and the typed IPC layer) so you can start building on top of it right away.
 
 ### Removing the welcome screen
 
 The window opens on a short tour of the stack. It is the one piece meant to be thrown away, and it
-is built so that costs nothing: it lives entirely in `app/components/welcome`, nothing else imports
-it, and it adds no IPC modules of its own.
+is built so that removing it costs nothing: it lives entirely in `app/components/welcome`, nothing
+else imports it, and it adds no IPC modules of its own.
 
 ```bash
 rm -rf app/components/welcome
 ```
 
-Then drop the `<Welcome />` line and its import from `app/app.tsx`. What's left is an empty window
+Then drop the `<Welcome />` line and its import from `app/app.tsx`. What is left is an empty window
 with the shell still around it, ready for your app.
 
 ### Try the demo
 
-Want to see everything the stack can do first? The **`demo`** branch is an interactive
-playground of every IPC primitive (cross-window state, streaming, background tasks, middleware),
-with the real source behind each demo:
+Want to see everything the stack can do first? The **`demo`** branch is an interactive playground of
+every IPC primitive (cross-window state, streaming, background tasks, middleware), with the real
+source behind each demo:
 
 ```bash
 git switch demo
@@ -109,27 +90,24 @@ npm install
 npm run dev
 ```
 
-Switch back to `main` (and re-run `npm install`) when you're ready to build.
+Switch back to `main` and re-run `npm install` when you are ready to build.
 
 <br />
 
-## Conveyor — Inter-Process Communication
+## Conveyor: Type-safe IPC
 
-IPC is powered by [electron-conveyor](https://github.com/guasam/electron-conveyor).
-One definition in main is the single source of truth for a feature; the renderer client is
-**inferred** from it — no channel strings, no hand-written API classes, no query keys.
+IPC is powered by [electron-conveyor](https://github.com/guasam/electron-conveyor). One definition
+in main is the single source of truth for a feature, and the renderer client is _inferred_ from it.
 
-Five primitives:
+| You want                          | Use             | Renderer side                                             |
+| --------------------------------- | --------------- | --------------------------------------------------------- |
+| Read something from main          | `query()`       | `await conveyor.x.y()` or `.useQuery()`                   |
+| Tell main to do something         | `command()`     | `await conveyor.x.y()` or `.useMutation()`                |
+| Chunks pushed as they're produced | `stream()`      | `for await (const c of conveyor.x.y())` or `.useStream()` |
+| Main pushing to the renderer      | `event()`       | `conveyor.x.y.subscribe(cb)` or `.useEvent(cb)`           |
+| State shared live across windows  | `defineStore()` | `useConveyorStore(store)`                                 |
 
-| You want…                            | Use           | Renderer side                        |
-| ------------------------------------ | ------------- | ------------------------------------ |
-| Read something from main             | `query()`     | `await it()`, or `.useQuery()`       |
-| Tell main to do something            | `command()`   | `await it()`, or `.useMutation()`    |
-| Chunks pushed as they're produced    | `stream()`    | `for await`, or `.useStream()`       |
-| Main pushing to the renderer         | `event()`     | `.subscribe(cb)`, or `.useEvent(cb)` |
-| State shared live across all windows | `defineStore` | `useConveyorStore(def)`              |
-
-### Adding a feature (two edits)
+### Adding a feature takes two edits
 
 **1. Define the module** in `conveyor/modules/`:
 
@@ -159,7 +137,7 @@ export const router = createRouter(
 )
 ```
 
-Done — the renderer client already knows it, fully typed:
+That's it. The renderer client already knows it, fully typed:
 
 ```tsx
 import { conveyor } from '@/conveyor/client'
@@ -176,175 +154,103 @@ function Notes() {
 
 Outside React, every member is a plain typed call: `await conveyor.notes.list()`.
 
-### Handler context
+### Errors
 
-Every handler receives `ctx`: the calling `window` and `sender`, plus the app context defined in
-`conveyor/init.ts` (this starter kit provides `appStartedAt`, the `windows` manager, and
-`openWindow`). Middleware can guard and widen it:
-
-```ts
-const authed = command.use(requireUser) // a reusable guarded base
-export const account = defineModule({
-  delete: authed(({ ctx }) => deleteAccount(ctx.user.id)),
-})
-```
-
-### Streams (LLM-style)
+Failures re-throw in the renderer as `ConveyorError` with a stable `code`. Conveyor reserves
+`UNKNOWN_PROCEDURE`, `INVALID_INPUT`, `INVALID_OUTPUT` and `HANDLER_ERROR`; anything your handler
+throws deliberately keeps its own code:
 
 ```ts
 // main
-respond: stream(z.string(), async function* ({ input, signal }) {
-  for await (const token of llm.complete(input)) {
-    if (signal.aborted) return
-    yield token
-  }
-})
+throw new ConveyorError('LOCKED', 'Unlock the vault first')
 
 // renderer
-for await (const token of conveyor.stream.respond(prompt)) append(token)
+try {
+  await conveyor.vault.open()
+} catch (err) {
+  if (err instanceof ConveyorError && err.code === 'LOCKED') promptUnlock()
+}
 ```
 
-### Events (main → renderer push)
+Branch on `err.code`, never on message strings. Validation failures also carry `err.issues` with
+the Standard Schema detail, so you can map them onto form fields. The `demo` branch's
+**Middleware** page has a working example.
 
-```ts
-// main — typed emitters per window or fan-out via the window manager
-const emit = createEmitter(windowModule, win)
-win.on('focus', () => emit.onFocusChange(true))
-
-// renderer
-conveyor.window.onFocusChange.useEvent(setFocused)
-```
-
-### Cross-window stores
-
-```ts
-// conveyor/stores/shared.ts — pure, imported by BOTH processes
-export const sharedStore = defineStore('shared', {
-  state: { count: 0, notes: [] as string[] },
-  schemas: { add: z.string() }, // payloads validated in main; types flow from the schema
-  actions: {
-    add: (s, note) => {
-      s.notes.push(note)
-    },
-    increment: (s) => {
-      s.count += 1
-    },
-  },
-  persist: true, // survives restarts (JSON under userData)
-})
-
-// renderer — feels local, synced across every window
-const count = useConveyorStore(sharedStore, (s) => s.count)
-const { add, increment } = useConveyorActions(sharedStore)
-```
-
-### Errors
-
-Failures re-throw in the renderer as `ConveyorError` with a stable `code` — including custom codes
-thrown by your handlers (`throw new ConveyorError('LOCKED', '...')`). Branch on `err.code`, never
-on message strings. See the `demo` branch's **Middleware** page for a working example.
-
-📖 **Full API documentation: [electron-conveyor](https://github.com/guasam/electron-conveyor)**
+> **Streams, Events, Middleware and the full Conveyor API reference** live in the
+> **[electron-conveyor](https://github.com/guasam/electron-conveyor)** repo, and our `demo` branch
+> has a working example for each one.
 
 <br />
 
-## Custom Window Components
+## Window shell
 
-This starter kit includes a custom window implementation with:
+The starter kit ships a custom window implementation: titlebar with app icon, window controls,
+a menu system with keyboard shortcuts, and a dark/light toggle. It works on Windows, macOS and
+Linux.
 
-- Custom titlebar with app icon
-- Window control buttons (minimize, maximize, close)
-- Menu system with keyboard shortcuts
-- Dark/light mode toggle
-- Cross-platform support for Windows and macOS
-
-<br />
-
-### Titlebar Menu Toggle
-
-The titlebar menu can be toggled using:
-
-- **Windows**: Press the `Alt` key
-- **macOS**: Press the `Option (⌥)` key
-
-When you press the toggle key:
-
-- If the menu is hidden, it becomes visible
-- If the menu is already visible, it gets hidden
-- The menu only toggles if menu items are available
+The titlebar menu toggles with `Alt` on Windows and Linux, `Option (⌥)` on macOS. Edit the items in
+`app/shell/menu.ts`.
 
 <br />
 
-### Customizing Menu Items
+## Project layout
 
-To add, remove or modify menu items, update the following file:
+### `app/` - renderer process
 
-- `app/shell/menu.ts`
+The React application that runs in the browser window. `app/shell/` holds the titlebar, menus,
+window frame and theme.
 
-<br />
+### `conveyor/` - the IPC surface
 
-## Key Directories Explained
+- `init.ts` - authoring primitives bound to the app's context
+- `modules/` - feature modules (**main-process only**; the renderer imports only `type AppRouter`)
+- `router.ts` - the single registration point for modules, stores, middleware and context
+- `client.ts` - the typed renderer client with hooks
 
-#### `app/` - Renderer Process
+### `lib/main/` - main process
 
-- **React application** that runs in the browser window
-- `app/shell/` — titlebar, menus, window frame, theme
+Window creation (`app.ts`, with the window manager), app lifecycle, and the `res://` protocol.
 
-#### `conveyor/` - The IPC Surface
+### `lib/preload/` - preload script
 
-- `conveyor/init.ts` — authoring primitives bound to the app's context
-- `conveyor/modules/` — feature modules (**main-process only**; the renderer imports only `type AppRouter`)
-- `conveyor/router.ts` — the single registration point (modules, stores, middleware, context)
-- `conveyor/client.ts` — the typed renderer client with hooks
-
-#### `lib/main/` - Main Process
-
-- Window creation (`app.ts`, with the window manager), app lifecycle, `res://` protocol
-
-#### `lib/preload/` - Preload Script
-
-- Two lines: expose the conveyor bridge. It never changes as your API grows, and it is
-  sandbox-compatible — the renderer runs with `sandbox: true`
+An import and one call that expose the conveyor bridge. It never changes as your API grows, and it
+is sandbox-compatible, so the renderer can run with `sandbox: true`.
 
 <br />
 
-## Path Aliases
+## Path aliases
 
 ```ts
 import { Button } from '@/app/components/ui/button'
 import { conveyor } from '@/conveyor/client'
 ```
 
-- `@/app/` → `app/` (renderer)
-- `@/lib/` → `lib/` (main + preload)
-- `@/conveyor/` → `conveyor/` (the IPC surface)
-- `@/resources/` → `resources/` (build resources)
+| Alias          | Points to                      |
+| -------------- | ------------------------------ |
+| `@/app/`       | `app/` (renderer)              |
+| `@/lib/`       | `lib/` (main + preload)        |
+| `@/conveyor/`  | `conveyor/` (the IPC surface)  |
+| `@/resources/` | `resources/` (build resources) |
 
 <br />
 
-## Development Workflow
-
-1. **UI Development**: Work in `app/` with React components
-2. **IPC**: Add a module in `conveyor/modules/`, register it in `conveyor/router.ts`
-3. **Window Features**: Customize the shell in `app/shell/`
-4. **Checks**: `npm run typecheck`, `npm run lint`, `npm run format`
-
-<br />
-
-## Building for Production
+## Checks
 
 ```bash
-# For Windows
-npm run build:win
-
-# For macOS
-npm run build:mac
-
-# For Linux
-npm run build:linux
-
-# Unpacked for all platforms
-npm run build:unpack
+npm run typecheck
+npm run lint
+npm run format
 ```
 
-Distribution files will be located in the `dist` directory.
+<br />
+
+## Building for production
+
+```bash
+npm run build:win     # Windows
+npm run build:mac     # macOS
+npm run build:linux   # Linux
+npm run build:unpack  # unpacked, all platforms
+```
+
+Distribution files land in the `dist` directory.
