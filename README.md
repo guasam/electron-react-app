@@ -38,9 +38,9 @@ cross-window state.
 
 <br />
 
-## What you get
+## What you get, built in
 
-|                         |                                                                                                                   |
+| Feature                 | Description                                                                                                       |
 | ----------------------- | ----------------------------------------------------------------------------------------------------------------- |
 | **Typed IPC**           | Queries, commands, streams and events with end-to-end inference. No channel strings, no hand-written API classes. |
 | **Cross-window stores** | Main-owned state synced live across every window, with opt-in persistence.                                        |
