@@ -15,7 +15,7 @@
     "lint": "eslint . --ext .ts,.tsx --fix",
     "lint:check": "eslint . --ext .ts,.tsx",
     "start": "electron-vite preview",
-    "postinstall": "electron-builder install-app-deps",
+    "postinstall": "install-electron && electron-builder install-app-deps",
     "vite:build:app": "electron-vite build",
     "electron:build:win": "electron-builder --win",
     "electron:build:mac": "electron-builder --mac",
