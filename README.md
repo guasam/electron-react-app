@@ -1,8 +1,7 @@
 # Electron React App
 
-A modern Electron starter kit with React, Vite, TypeScript and TailwindCSS, built around
-**[electron-conveyor](https://github.com/guasam/electron-conveyor)** for type-safe IPC and
-cross-window state.
+A modern Electron starter kit with React, Vite and TypeScript, built around
+electron-conveyor for type-safe IPC and a smoother dev experience.
 
 <br />
 
@@ -25,29 +24,27 @@ cross-window state.
 
 <br />
 
-## Stack
+## Features
 
-🔹 **[Electron](https://www.electronjs.org)** - Cross-platform desktop application framework.<br />
-🔹 **[React](https://react.dev)** - The library for web and native user interfaces.<br />
-🔹 **[electron-conveyor](https://github.com/guasam/electron-conveyor)** - Type-safe IPC + cross-window state.<br />
-🔹 **[TypeScript](https://www.typescriptlang.org)** - Type-safe JavaScript.<br />
-🔹 **[Shadcn UI](https://ui.shadcn.com)** - Beautiful and accessible component library.<br />
-🔹 **[TailwindCSS](https://tailwindcss.com)** - Utility-first CSS framework.<br />
-🔹 **[Electron Vite](https://electron-vite.org)** - Lightning-fast build tool based on **Vite** for fastest hot-reload.<br />
-🔹 **[Electron Builder](https://www.electron.build/index.html)** - Configured for packaging applications.<br />
-
-<br />
-
-## What you get, built in
-
-| Feature                 | Description                                                                                                       |
-| ----------------------- | ----------------------------------------------------------------------------------------------------------------- |
-| **Typed IPC**           | Queries, commands, streams and events with end-to-end inference. No channel strings, no hand-written API classes. |
-| **Cross-window stores** | Main-owned state synced live across every window, with opt-in persistence.                                        |
-| **Sandboxed renderer**  | `sandbox: true` out of the box. The conveyor preload is sandbox-compatible.                                       |
-| **Custom window shell** | Themed frame, titlebar and menu system you can style however you want.                                            |
-| **Demo branch**         | A live playground of every primitive on `demo`, while `main` stays minimal.                                       |
-| **The usual tooling**   | Vite HMR, Shadcn UI, Tailwind, ESLint and Prettier, VS Code debug configs, `res://` protocol, import aliases.     |
+- 🚀 **Electron** - Cross-platform desktop apps for Windows, macOS and Linux
+- ⚛️ **React** - Component-based UI library
+- 📦 **TypeScript** - Type-safe JavaScript across main, preload and renderer
+- 🎨 **Shadcn UI** - Beautiful and accessible components on Radix
+- 🌊 **TailwindCSS** - Utility-first CSS framework
+- ⚡ **Electron Vite** - Lightning-fast build tool, powered by Vite
+- 🛠️ **Electron Builder** - Packaging for Windows, macOS and Linux
+- 🔌 **Electron Conveyor** - Type-safe IPC, queries, commands, streams and events via [electron-conveyor](https://github.com/guasam/electron-conveyor)
+- 🔄 **Cross-window state** - Stores owned by main, synced live to every window, with opt-in persistence
+- 🪟 **Custom window shell** - Themed frame, titlebar and menus with keyboard shortcuts
+- 🌗 **Dark/Light mode** - Built-in theme switching
+- 🔥 **Fast HMR** - Instant renderer updates, and main and preload restart on save
+- 🛡️ **Error boundary** - Catches render errors with detailed reporting
+- 📐 **Clean project structure** - Separation of main, preload and renderer processes
+- 🧩 **Path aliases** - Keeps your code organized
+- 📁 **Resources protocol** - Load local resources from the renderer via `res://`
+- 🧹 **ESLint & Prettier** - Preconfigured for consistent code
+- 🐞 **VS Code debugging** - Launch configs for both main and renderer
+- 🧪 **Demo branch** - Interactive playground of every IPC primitive, while `main` stays minimal
 
 <br />
 
@@ -65,6 +62,8 @@ npm run dev
 That starts Electron with hot reload. `main` is deliberately minimal (a themed window frame,
 titlebar, menus and the typed IPC layer) so you can start building on top of it right away.
 
+<br />
+
 ### Removing the welcome screen
 
 The window opens on a short tour of the stack. It is the one piece meant to be thrown away, and it
@@ -77,6 +76,8 @@ rm -rf app/components/welcome
 
 Then drop the `<Welcome />` line and its import from `app/app.tsx`. What is left is an empty window
 with the shell still around it, ready for your app.
+
+<br />
 
 ### Try the demo
 
@@ -106,6 +107,8 @@ in main is the single source of truth for a feature, and the renderer client is 
 | Chunks pushed as they're produced | `stream()`      | `for await (const c of conveyor.x.y())` or `.useStream()` |
 | Main pushing to the renderer      | `event()`       | `conveyor.x.y.subscribe(cb)` or `.useEvent(cb)`           |
 | State shared live across windows  | `defineStore()` | `useConveyorStore(store)`                                 |
+
+<br />
 
 ### Adding a feature takes two edits
 
@@ -154,7 +157,9 @@ function Notes() {
 
 Outside React, every member is a plain typed call: `await conveyor.notes.list()`.
 
-### Errors
+<br />
+
+## Error boundary
 
 Failures re-throw in the renderer as `ConveyorError` with a stable `code`. Conveyor reserves
 `UNKNOWN_PROCEDURE`, `INVALID_INPUT`, `INVALID_OUTPUT` and `HANDLER_ERROR`; anything your handler
@@ -193,28 +198,14 @@ The titlebar menu toggles with `Alt` on Windows and Linux, `Option (⌥)` on mac
 
 <br />
 
-## Project layout
+## Building for production
 
-### `app/` - renderer process
-
-The React application that runs in the browser window. `app/shell/` holds the titlebar, menus,
-window frame and theme.
-
-### `conveyor/` - the IPC surface
-
-- `init.ts` - authoring primitives bound to the app's context
-- `modules/` - feature modules (**main-process only**; the renderer imports only `type AppRouter`)
-- `router.ts` - the single registration point for modules, stores, middleware and context
-- `client.ts` - the typed renderer client with hooks
-
-### `lib/main/` - main process
-
-Window creation (`app.ts`, with the window manager), app lifecycle, and the `res://` protocol.
-
-### `lib/preload/` - preload script
-
-An import and one call that expose the conveyor bridge. It never changes as your API grows, and it
-is sandbox-compatible, so the renderer can run with `sandbox: true`.
+```bash
+npm run build:win     # Windows
+npm run build:mac     # macOS
+npm run build:linux   # Linux
+npm run build:unpack  # unpacked, all platforms
+```
 
 <br />
 
@@ -234,23 +225,43 @@ import { conveyor } from '@/conveyor/client'
 
 <br />
 
-## Checks
+## Project structure
 
 ```bash
-npm run typecheck
-npm run lint
-npm run format
+├── app/                        # Renderer process (React)
+│   ├── assets/                 # Images and other static assets
+│   ├── components/
+│   │   ├── ui/                 # Shadcn UI components
+│   │   ├── welcome/            # Welcome screen, safe to delete
+│   │   └── error-boundary.tsx  # Render error reporting
+│   ├── shell/                  # Window frame, titlebar, menus and theme
+│   │   └── menu.ts             # Titlebar menu items
+│   ├── styles/
+│   │   ├── app.css             # App stylesheet
+│   │   └── globals.css         # Tailwind setup and theme tokens
+│   ├── app.tsx                 # Root component
+│   ├── index.html              # Entry HTML file
+│   └── renderer.tsx            # Renderer process entry
+├── conveyor/                   # The IPC surface
+│   ├── modules/                # Feature modules (main process only)
+│   ├── client.ts               # Typed renderer client with hooks
+│   ├── init.ts                 # Authoring primitives bound to the app's context
+│   └── router.ts               # Registers modules, stores, middleware and context
+├── lib/
+│   ├── main/                   # Main process
+│   │   ├── app.ts              # Window creation and window manager
+│   │   └── main.ts             # Main entry point and app lifecycle
+│   ├── preload/
+│   │   └── preload.ts          # Exposes the conveyor bridge, sandbox-compatible
+│   └── utils.ts                # Shared helpers
+├── resources/
+│   └── build/                  # App icons and macOS entitlements
+├── electron-builder.yml        # Packaging config
+└── electron.vite.config.ts     # Build config for main, preload and renderer
 ```
 
 <br />
 
-## Building for production
+## Contributing
 
-```bash
-npm run build:win     # Windows
-npm run build:mac     # macOS
-npm run build:linux   # Linux
-npm run build:unpack  # unpacked, all platforms
-```
-
-Distribution files land in the `dist` directory.
+Contributions are welcome! Feel free to submit a Pull Request.
