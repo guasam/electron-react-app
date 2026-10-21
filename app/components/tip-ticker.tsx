@@ -24,9 +24,6 @@ function getTips(isMac: boolean, onSelect: (id: string) => void): ReactNode[] {
       Press <Key>{isMac ? 'Option' : 'Alt'}</Key> to show or hide the menu bar.
     </>,
     <>
-      Hit <Code>View code</Code> on any page to see the source behind it.
-    </>,
-    <>
       Open a second window from{' '}
       <button
         onClick={() => onSelect('store')}
@@ -63,8 +60,7 @@ export function TipTicker({ onSelect }: { onSelect: (id: string) => void }) {
       // Pinned to the bottom of the scroll pane, so it stays in view however short the window is.
       className="sticky bottom-0 border-t border-border bg-card"
     >
-      {/* Right padding keeps the dots clear of the floating "View code" button. */}
-      <div className="flex items-center gap-3 py-3 pr-40 pl-10">
+      <div className="flex items-center gap-3 px-10 py-3">
         <Lightbulb className="size-4 flex-none text-brand" />
         <div className="relative min-h-5 min-w-0 flex-1 overflow-hidden text-[13.5px] leading-5 text-muted-foreground">
           {/* Keyed so each tip remounts and plays the entrance again. */}

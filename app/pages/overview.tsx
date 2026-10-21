@@ -53,7 +53,7 @@ export function Overview({ onNavigate }: PageProps) {
           <span className="text-brand">demo branch!</span>
         </h1>
         <p className="mt-5 max-w-[58ch] text-[15.5px] leading-[1.6] text-pretty text-muted-foreground">
-          Every page below is a real capability, running live next to the code that drives it. Pick one and try it.
+          Every page below is a real capability, running live. Pick one and try it.
         </p>
 
         {/* capability strips */}
