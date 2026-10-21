@@ -23,7 +23,7 @@ const COMMANDS = ['git switch demo', 'npm install', 'npm run dev']
 const PAGES: { icon: LucideIcon; label: string; blurb: string }[] = [
   { icon: MessageSquare, label: 'Streaming', blurb: 'Live model replies, token by token' },
   { icon: FolderSearch, label: 'Folder analyzer', blurb: 'Native dialog, then a streamed scan' },
-  { icon: Activity, label: 'System monitor', blurb: 'CPU and memory, polled from main' },
+  { icon: Activity, label: 'System monitor', blurb: 'Live CPU, polled from main' },
   { icon: StickyNote, label: 'Shared state', blurb: 'One store, mirrored across windows' },
   { icon: ShieldCheck, label: 'Middleware', blurb: 'Guarded calls, typed errors' },
   { icon: MousePointer2, label: 'Ghost cursors', blurb: 'Pointer presence between windows' },
