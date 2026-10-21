@@ -18,7 +18,7 @@ electron-conveyor for type-safe IPC and a smoother dev experience.
 ![TypeScript](https://img.shields.io/badge/TypeScript-v6.0.3-blue) &nbsp;
 ![Vite](https://img.shields.io/badge/Vite-v7.3.6-blue) &nbsp;
 ![Tailwind](https://img.shields.io/badge/Tailwind-v4.3.3-blue) &nbsp;
-![Conveyor](https://img.shields.io/badge/Conveyor-v0.4.0-3a9bff)
+![Conveyor](https://img.shields.io/badge/Conveyor-v0.4.0-1f83ea)
 
 </div>
 
