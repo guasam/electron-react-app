@@ -1,15 +1,18 @@
 # Change Log
 
-All notable changes to the electron-react-app (ERA) are listed here.
+All notable changes to the `electron-react-app` are listed here.
 
 <br>
 
 ## v13.1.0
 
-- Welcome screen: the overview cards give way to a rolling tip ticker pinned to the bottom, the
-  headline reads "Electron React App starter kit!", and the stack chips and sidebar are plainer
+- Electron version upgraded to `v45.0.0`
+- Welcome screens tweaked
 - The titlebar menu starts hidden. `Alt` (`Option` on macOS) shows and hides it.
-- Dependencies bumped, and the Electron binary is fetched on `postinstall`
+- Changed default window to 1100×768
+- Other dependencies bumped, and the Electron binary is fetched on `postinstall`
+- The `demo` branch updated
+- `npm run build:mac` skips code signing. Set a Developer ID in `electron-builder.yml` to ship a signed build.
 
 <br>
 
