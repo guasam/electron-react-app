@@ -6,7 +6,7 @@ electron-conveyor for type-safe IPC and a smoother dev experience.
 <br />
 
 <p align="center">
-    <img src="app/assets/era-conveyor.png" width="1141" alt="Electron React App" />
+    <img src="app/assets/era-welcome.png" width="1164" alt="Electron React App" />
 </p>
 
 <br />
