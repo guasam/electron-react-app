@@ -36,12 +36,6 @@ export function Hero({ entry, onSelect }: { entry: StackEntry; onSelect: (id: st
     <div className="relative mx-auto max-w-3xl px-8 py-14">
       <style>{WOBBLE_CSS}</style>
 
-      {/* Brand glow behind the headline. Non-interactive, and clipped by the scroll container. */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -top-40 -left-24 size-[26rem] rounded-full bg-brand/14 blur-[80px]"
-      />
-
       <div className="relative">
         <h1 className="mt-5 text-[2.6rem] leading-[1.08] font-semibold tracking-[-0.03em] text-balance">
           Your desktop app
