@@ -23,8 +23,8 @@ export function openAppWindow(page?: string): BrowserWindow {
 export function createAppWindow(hash?: string): BrowserWindow {
   // Create the main window.
   const mainWindow = new BrowserWindow({
-    width: 1240,
-    height: 780,
+    width: 1100,
+    height: 768,
     minWidth: 720,
     minHeight: 520,
     show: false,

@@ -4,6 +4,15 @@ All notable changes to the electron-react-app (ERA) are listed here.
 
 <br>
 
+## v13.1.0
+
+- Welcome screen: the overview cards give way to a rolling tip ticker pinned to the bottom, the
+  headline reads "Electron React App starter kit!", and the stack chips and sidebar are plainer
+- The titlebar menu starts hidden. `Alt` (`Option` on macOS) shows and hides it.
+- Dependencies bumped, and the Electron binary is fetched on `postinstall`
+
+<br>
+
 ## v13.0.0
 
 **Structure**

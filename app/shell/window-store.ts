@@ -21,7 +21,7 @@ export const useWindowStore = create<WindowState>((set) => ({
   maximizable: true,
   isFocused: true,
   isMaximized: false,
-  menuVisible: true,
+  menuVisible: false,
   setInit: (init) => set(init),
   setFocused: (isFocused) => set({ isFocused }),
   setMaximized: (isMaximized) => set({ isMaximized }),

@@ -65,9 +65,9 @@
     --border-bright: #d3cec6;
     --input: #e2ded8;
     --ring: #d3cec6;
-    --brand: #ff5c3a;
-    --brand-soft: rgba(255, 92, 58, 0.13);
-    --brand-hover: #f04724;
+    --brand: #1f83ea;
+    --brand-soft: rgba(31, 131, 234, 0.13);
+    --brand-hover: #1670d0;
     --success: #16a34a;
     --radius: 0.5rem;
   }
@@ -94,9 +94,9 @@
     --border-bright: #2e3335;
     --input: #212527;
     --ring: #2e3335;
-    --brand: #ff5c3a;
-    --brand-soft: rgba(255, 92, 58, 0.13);
-    --brand-hover: #ff7053;
+    --brand: #1f83ea;
+    --brand-soft: rgba(31, 131, 234, 0.13);
+    --brand-hover: #3d95f5;
     --success: #4ade80;
     --radius: 0.5rem;
   }

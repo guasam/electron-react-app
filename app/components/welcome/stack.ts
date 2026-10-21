@@ -13,22 +13,20 @@ export interface StackEntry {
   docs: string
   /** Renders through the landing hero instead of the standard panel. Exactly one entry sets it. */
   hero?: boolean
+  /** Leaves this entry out of the landing page's chip row. It still gets its sidebar row and panel. */
+  hideChip?: boolean
 }
 
 export const STACK: StackEntry[] = [
   {
     id: 'overview',
-    color: '#ff5c3a',
+    color: '#1f83ea',
     label: 'Overview',
     icon: Sparkles,
     hero: true,
     tagline: 'A starting point, not a framework',
     body: [],
-    highlights: [
-      { title: 'Nothing to unpick', description: 'The showcase lives in one folder with no wiring anywhere else' },
-      { title: 'Typed end to end', description: 'One router type flows from the main process to the renderer' },
-      { title: 'Themed already', description: 'Light and dark tokens, applied across the shell and components' },
-    ],
+    highlights: [],
     docs: 'https://github.com/guasam/electron-react-app',
   },
   {
@@ -49,8 +47,59 @@ export const STACK: StackEntry[] = [
     docs: 'https://www.electronjs.org/docs/latest',
   },
   {
+    id: 'react',
+    color: '#61dafb',
+    label: 'React',
+    icon: Atom,
+    tagline: 'Interfaces composed from small pieces',
+    body: [
+      'React describes the interface as a function of state. You write what each state should look like, and the library works out what to change on screen.',
+      'Components keep related markup, behaviour, and styling together, which is what makes a screen like this one liftable in a single folder.',
+    ],
+    highlights: [
+      { title: 'Component model', description: 'Encapsulated pieces that own their state and compose freely' },
+      { title: 'Declarative', description: 'Describe the result you want; React reconciles the difference' },
+      { title: 'Deep ecosystem', description: 'Routing, data fetching, and animation are a package away' },
+    ],
+    docs: 'https://react.dev',
+  },
+  {
+    id: 'typescript',
+    color: '#3178c6',
+    label: 'TypeScript',
+    icon: Braces,
+    tagline: 'Mistakes surface before the app runs',
+    body: [
+      'Types are what let a desktop app of any size stay approachable. Renaming a handler or changing a payload turns into a list of compiler errors rather than a runtime surprise.',
+      'It pays off most at the process boundary, where a typo in a channel name would otherwise fail silently at runtime with nothing to catch it.',
+    ],
+    highlights: [
+      { title: 'Caught at build', description: 'npm run typecheck fails before a broken build ships' },
+      { title: 'Editor knows the shape', description: 'Completion and rename work across process boundaries' },
+      { title: 'Inference first', description: 'Most types are derived, not written by hand' },
+    ],
+    docs: 'https://www.typescriptlang.org/docs/',
+  },
+  {
+    id: 'vite',
+    color: '#646cff',
+    label: 'Vite',
+    icon: Zap,
+    tagline: 'Instant reloads, in both processes',
+    body: [
+      'electron-vite extends Vite across the whole app: main, preload, and renderer each get their own build, configured in one file.',
+      'In development the renderer hot-reloads in place, and editing main-process code restarts it automatically. In production everything is bundled and tree-shaken.',
+    ],
+    highlights: [
+      { title: 'Hot module replacement', description: 'Interface edits appear without losing the current state' },
+      { title: 'Three targets, one config', description: 'Main, preload, and renderer built from a single file' },
+      { title: 'Optimised output', description: 'Assets and native dependencies handled for packaging' },
+    ],
+    docs: 'https://electron-vite.org',
+  },
+  {
     id: 'conveyor',
-    color: '#ff5c3a',
+    color: '#1f83ea',
     label: 'Conveyor',
     icon: Cable,
     tagline: 'Typed IPC and live state across every window',
@@ -75,60 +124,9 @@ export const STACK: StackEntry[] = [
     docs: 'https://github.com/guasam/electron-react-app',
   },
   {
-    id: 'react',
-    color: '#61dafb',
-    label: 'React',
-    icon: Atom,
-    tagline: 'Interfaces composed from small pieces',
-    body: [
-      'React describes the interface as a function of state. You write what each state should look like, and the library works out what to change on screen.',
-      'Components keep related markup, behaviour, and styling together, which is what makes a screen like this one liftable in a single folder.',
-    ],
-    highlights: [
-      { title: 'Component model', description: 'Encapsulated pieces that own their state and compose freely' },
-      { title: 'Declarative', description: 'Describe the result you want; React reconciles the difference' },
-      { title: 'Deep ecosystem', description: 'Routing, data fetching, and animation are a package away' },
-    ],
-    docs: 'https://react.dev',
-  },
-  {
-    id: 'vite',
-    color: '#646cff',
-    label: 'Vite',
-    icon: Zap,
-    tagline: 'Instant reloads, in both processes',
-    body: [
-      'electron-vite extends Vite across the whole app: main, preload, and renderer each get their own build, configured in one file.',
-      'In development the renderer hot-reloads in place, and editing main-process code restarts it automatically. In production everything is bundled and tree-shaken.',
-    ],
-    highlights: [
-      { title: 'Hot module replacement', description: 'Interface edits appear without losing the current state' },
-      { title: 'Three targets, one config', description: 'Main, preload, and renderer built from a single file' },
-      { title: 'Optimised output', description: 'Assets and native dependencies handled for packaging' },
-    ],
-    docs: 'https://electron-vite.org',
-  },
-  {
-    id: 'typescript',
-    color: '#3178c6',
-    label: 'TypeScript',
-    icon: Braces,
-    tagline: 'Mistakes surface before the app runs',
-    body: [
-      'Types are what let a desktop app of any size stay approachable. Renaming a handler or changing a payload turns into a list of compiler errors rather than a runtime surprise.',
-      'It pays off most at the process boundary, where a typo in a channel name would otherwise fail silently at runtime with nothing to catch it.',
-    ],
-    highlights: [
-      { title: 'Caught at build', description: 'npm run typecheck fails before a broken build ships' },
-      { title: 'Editor knows the shape', description: 'Completion and rename work across process boundaries' },
-      { title: 'Inference first', description: 'Most types are derived, not written by hand' },
-    ],
-    docs: 'https://www.typescriptlang.org/docs/',
-  },
-  {
     id: 'tailwind',
     color: '#38bdf8',
-    label: 'Tailwind CSS',
+    label: 'Tailwind',
     icon: Palette,
     tagline: 'Styling that stays next to the markup',
     body: [
@@ -147,6 +145,7 @@ export const STACK: StackEntry[] = [
     // shadcn brands in plain black and white; this mid grey is the one that reads in both themes.
     color: '#8b8b93',
     label: 'shadcn/ui',
+    hideChip: true,
     icon: Blocks,
     tagline: 'Components you own, not ones you import',
     body: [
@@ -165,6 +164,7 @@ export const STACK: StackEntry[] = [
     // No strong brand colour of its own; this green reads as "shipped" against both themes.
     color: '#4f9d69',
     label: 'electron-builder',
+    hideChip: true,
     icon: Package,
     tagline: 'From source to installers people can run',
     body: [

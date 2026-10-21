@@ -26,6 +26,8 @@ mac:
     - NSMicrophoneUsageDescription: Application requests access to the device's microphone.
     - NSDocumentsFolderUsageDescription: Application requests access to the user's Documents folder.
     - NSDownloadsFolderUsageDescription: Application requests access to the user's Downloads folder.
+  # Unsigned builds, so a stray keychain certificate can't stall signing. Set a Developer ID to ship.
+  identity: null
   notarize: false
 dmg:
   artifactName: ${name}-${version}.${ext}
