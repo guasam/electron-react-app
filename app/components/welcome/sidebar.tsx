@@ -8,12 +8,14 @@ const REPO = 'https://github.com/guasam/electron-react-app'
 
 /** Stack navigation: one row per entry, with the live IPC badge and repo link pinned to the bottom. */
 export function Sidebar({ active, onSelect }: { active: string; onSelect: (id: string) => void }) {
+  const { data: version } = conveyor.app.version.useQuery()
+
   return (
     <nav className="flex w-59 flex-none flex-col border-r border-border bg-card pt-5 pb-3.5">
       <div className="px-4.5 pb-4.5">
         <div className="text-[15px] font-bold tracking-[-0.02em]">Electron React App</div>
         <div className="mt-0.5 font-mono text-[10.5px] tracking-[0.06em] text-muted-foreground/70 uppercase">
-          the stack
+          {version && `v${version}`}
         </div>
       </div>
 
