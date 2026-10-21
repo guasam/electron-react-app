@@ -1,4 +1,4 @@
-import { MessageSquare, Folder, Activity, Copy, Shield, ArrowRight, type LucideIcon } from 'lucide-react'
+import { ArrowRight } from 'lucide-react'
 import { type PageProps } from '../registry'
 import { TipTicker } from '../components/tip-ticker'
 
@@ -6,7 +6,6 @@ interface Strip {
   id: string
   title: string
   desc: string
-  icon: LucideIcon
   preview: () => React.ReactNode
 }
 
@@ -15,35 +14,30 @@ const STRIPS: Strip[] = [
     id: 'stream',
     title: 'Streaming',
     desc: 'Token-by-token, LLM-style, backpressure aware',
-    icon: MessageSquare,
     preview: StreamPreview,
   },
   {
     id: 'analyzer',
     title: 'Folder analyzer',
     desc: 'Native dialog, then a streamed scan feeding a live treemap',
-    icon: Folder,
     preview: AnalyzerPreview,
   },
   {
     id: 'system',
     title: 'System monitor',
     desc: 'CPU and memory, polled on an interval you own',
-    icon: Activity,
     preview: MonitorPreview,
   },
   {
     id: 'store',
     title: 'Shared state',
     desc: 'One store, synced across every window',
-    icon: Copy,
     preview: StorePreview,
   },
   {
     id: 'secure',
     title: 'Middleware',
     desc: 'Guards and context, composed per channel',
-    icon: Shield,
     preview: MiddlewarePreview,
   },
 ]
@@ -53,24 +47,18 @@ export function Overview({ onNavigate }: PageProps) {
     <div className="flex min-h-full flex-col">
       <div className="flex-1 px-10 pt-[60px] pb-10">
         {/* hero */}
-        <h1 className="max-w-[15ch] text-[52px] leading-[1.02] font-semibold tracking-[-0.035em]">
-          Type-safe IPC,
+        <h1 className="text-[2.6rem] leading-[1.08] font-semibold tracking-[-0.03em] text-balance">
+          Electron React App
           <br />
-          one source of{' '}
-          <span className="relative inline-block">
-            <span className="absolute right-[-2px] bottom-[4px] left-[-2px] h-[11px] bg-brand opacity-90" />
-            <span className="relative">truth.</span>
-          </span>
+          <span className="text-brand">demo branch!</span>
         </h1>
         <p className="mt-5 max-w-[58ch] text-[15.5px] leading-[1.6] text-pretty text-muted-foreground">
-          Cross-window state for Electron with end-to-end inference. Every page below is a real capability, running
-          live, next to the code that drives it.
+          Every page below is a real capability, running live next to the code that drives it. Pick one and try it.
         </p>
 
         {/* capability strips */}
         <div className="mt-9 flex flex-col gap-[9px]">
           {STRIPS.map((s, i) => {
-            const Icon = s.icon
             const Preview = s.preview
             return (
               <button
@@ -80,9 +68,6 @@ export function Overview({ onNavigate }: PageProps) {
               >
                 <span className="w-4 flex-none font-mono text-[10px] text-muted-foreground/60">
                   {String(i + 1).padStart(2, '0')}
-                </span>
-                <span className="flex size-[34px] flex-none items-center justify-center rounded-[9px] border border-border bg-muted text-brand">
-                  <Icon className="size-4" />
                 </span>
                 <span className="min-w-0 flex-1">
                   <span className="block text-[14.5px] font-semibold tracking-[-0.01em]">{s.title}</span>
