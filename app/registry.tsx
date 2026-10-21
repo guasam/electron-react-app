@@ -41,7 +41,7 @@ export const PAGES: PageDef[] = [
   {
     id: 'system',
     label: 'System monitor',
-    blurb: 'CPU & memory, polled',
+    blurb: 'Live CPU, polled',
     group: 'primitives',
     icon: Activity,
     component: SystemPage,

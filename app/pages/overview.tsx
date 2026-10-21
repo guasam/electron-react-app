@@ -25,7 +25,7 @@ const STRIPS: Strip[] = [
   {
     id: 'system',
     title: 'System monitor',
-    desc: 'CPU and memory, polled on an interval you own',
+    desc: 'Live CPU usage, polled on an interval you own',
     preview: MonitorPreview,
   },
   {
