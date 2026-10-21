@@ -1,6 +1,6 @@
 {
   "name": "era",
-  "version": "13.0.0",
+  "version": "13.1.0",
   "description": "A modern Electron application starter kit with React, Vite, TypeScript, Shadcn UI and TailwindCSS",
   "main": "./out/main/main.js",
   "license": "MIT",
