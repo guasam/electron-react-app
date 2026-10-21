@@ -13,12 +13,12 @@ electron-conveyor for type-safe IPC and a smoother dev experience.
 
 <div align="center">
 
-![Electron](https://img.shields.io/badge/Electron-v43.5.1-blue) &nbsp;
-![React](https://img.shields.io/badge/React-v19.2.8-blue) &nbsp;
+![Electron](https://img.shields.io/badge/Electron-v45.0.0-blue) &nbsp;
+![React](https://img.shields.io/badge/React-v19.3.1-blue) &nbsp;
 ![TypeScript](https://img.shields.io/badge/TypeScript-v6.0.3-blue) &nbsp;
-![Vite](https://img.shields.io/badge/Vite-v7.3.6-blue) &nbsp;
+![Vite](https://img.shields.io/badge/Vite-v7.3.7-blue) &nbsp;
 ![Tailwind](https://img.shields.io/badge/Tailwind-v4.3.3-blue) &nbsp;
-![Conveyor](https://img.shields.io/badge/Conveyor-v0.4.0-1f83ea)
+![Conveyor](https://img.shields.io/badge/Conveyor-v0.4.1-1f83ea)
 
 </div>
 
