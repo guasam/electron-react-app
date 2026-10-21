@@ -24,11 +24,7 @@ export const STACK: StackEntry[] = [
     hero: true,
     tagline: 'A starting point, not a framework',
     body: [],
-    highlights: [
-      { title: 'Nothing to unpick', description: 'The showcase lives in one folder with no wiring anywhere else' },
-      { title: 'Typed end to end', description: 'One router type flows from the main process to the renderer' },
-      { title: 'Themed already', description: 'Light and dark tokens, applied across the shell and components' },
-    ],
+    highlights: [],
     docs: 'https://github.com/guasam/electron-react-app',
   },
   {

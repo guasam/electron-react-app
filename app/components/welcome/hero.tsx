@@ -1,8 +1,8 @@
 import type { CSSProperties } from 'react'
 import { ArrowUpRight } from 'lucide-react'
 import { conveyor } from '@/conveyor/client'
-import { Card } from '../ui/card'
 import { STACK, type StackEntry } from './stack'
+import { TipTicker } from './tips'
 
 // Scoped to this folder so the whole welcome screen still deletes without leaving CSS behind.
 // The mark rests at a tilt and the shake swings around that angle, so it reads as jaunty when
@@ -33,10 +33,10 @@ const WOBBLE_CSS = `
  */
 export function Hero({ entry, onSelect }: { entry: StackEntry; onSelect: (id: string) => void }) {
   return (
-    <div className="relative mx-auto max-w-3xl px-8 py-14">
+    <div className="flex min-h-full flex-col">
       <style>{WOBBLE_CSS}</style>
 
-      <div className="relative">
+      <div className="relative mx-auto w-full max-w-3xl flex-1 px-8 py-14">
         <h1 className="mt-5 text-[2.6rem] leading-[1.08] font-semibold tracking-[-0.03em] text-balance">
           Your desktop app
           <br />
@@ -72,15 +72,6 @@ export function Hero({ entry, onSelect }: { entry: StackEntry; onSelect: (id: st
           ))}
         </div>
 
-        <div className="mt-9 grid gap-2.5 sm:grid-cols-3">
-          {entry.highlights.map((highlight) => (
-            <Card key={highlight.title} className="gap-1.5 p-3.5">
-              <div className="text-[13.5px] font-medium">{highlight.title}</div>
-              <p className="text-[13px] leading-relaxed text-muted-foreground">{highlight.description}</p>
-            </Card>
-          ))}
-        </div>
-
         <p className="mt-8 text-[14px] leading-relaxed text-muted-foreground/80">
           This screen is the one part meant to be thrown away.
           <br />
@@ -97,6 +88,8 @@ export function Hero({ entry, onSelect }: { entry: StackEntry; onSelect: (id: st
           <ArrowUpRight className="size-3.5" />
         </button>
       </div>
+
+      <TipTicker onSelect={onSelect} />
     </div>
   )
 }
