@@ -1,31 +1,7 @@
-import type { CSSProperties } from 'react'
 import { ArrowUpRight } from 'lucide-react'
 import { conveyor } from '@/conveyor/client'
 import { STACK, type StackEntry } from './stack'
 import { TipTicker } from './tips'
-
-// Scoped to this folder so the whole welcome screen still deletes without leaving CSS behind.
-// The mark rests at a tilt and the shake swings around that angle, so it reads as jaunty when
-// still rather than only in motion. Most of the cycle is rest: this is punctuation, not a spinner.
-const WOBBLE_CSS = `
-  @keyframes welcome-wobble {
-    0%, 62%, 100% { transform: rotate(9deg); }
-    66%  { transform: rotate(-5deg); }
-    72%  { transform: rotate(20deg); }
-    78%  { transform: rotate(2deg); }
-    84%  { transform: rotate(14deg); }
-    90%  { transform: rotate(7deg); }
-  }
-  .welcome-wobble {
-    display: inline-block;
-    transform: rotate(9deg);
-    transform-origin: bottom center;
-    animation: welcome-wobble 3.4s ease-in-out infinite;
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .welcome-wobble { animation: none; }
-  }
-`
 
 /**
  * The landing panel. Deliberately unlike the per-technology panels: this is the first thing anyone
@@ -34,15 +10,11 @@ const WOBBLE_CSS = `
 export function Hero({ entry, onSelect }: { entry: StackEntry; onSelect: (id: string) => void }) {
   return (
     <div className="flex min-h-full flex-col">
-      <style>{WOBBLE_CSS}</style>
-
       <div className="relative mx-auto w-full max-w-3xl flex-1 px-8 py-14">
         <h1 className="mt-5 text-[2.6rem] leading-[1.08] font-semibold tracking-[-0.03em] text-balance">
-          Your desktop app
+          Electron React App
           <br />
-          <span className="text-brand">
-            starts here<span className="welcome-wobble">!</span>
-          </span>
+          <span className="text-brand">starter kit!</span>
         </h1>
 
         <p className="mt-5 max-w-[52ch] text-[15.5px] leading-relaxed text-pretty text-muted-foreground">
@@ -51,23 +23,14 @@ export function Hero({ entry, onSelect }: { entry: StackEntry; onSelect: (id: st
         </p>
 
         <div className="mt-7 flex flex-wrap gap-1.5">
-          {STACK.filter((e) => !e.hero).map((e) => (
+          {STACK.filter((e) => !e.hero && !e.hideChip).map((e) => (
             <button
               key={e.id}
               onClick={() => onSelect(e.id)}
-              // Each chip carries its project's colour as a local variable, so one set of utility
-              // classes tints seven different ways without generating seven sets of classes.
-              style={{ '--tech': e.color } as CSSProperties}
-              className="group relative overflow-hidden rounded-full border border-border bg-card px-2.75 py-1 font-mono text-[12px] text-muted-foreground transition-[color,border-color,box-shadow,transform] duration-200 cursor-pointer hover:border-[var(--tech)] hover:text-foreground hover:shadow-[0_2px_14px_-4px_var(--tech)]"
+              className="flex cursor-pointer items-center gap-1.75 rounded-full border border-border bg-card px-2.75 py-1 font-mono text-[12px] text-muted-foreground transition-colors hover:border-brand/50 hover:text-foreground"
             >
-              <span
-                aria-hidden
-                className="absolute inset-0 bg-[linear-gradient(115deg,var(--tech),transparent_70%)] opacity-0 transition-opacity duration-200 group-hover:opacity-22"
-              />
-              <span className="relative flex items-center gap-1.75">
-                <span className="size-2 rounded-full bg-[var(--tech)] opacity-85 transition-opacity duration-200 group-hover:opacity-100" />
-                {e.label}
-              </span>
+              <span className="size-2 rounded-full bg-brand/60" />
+              {e.label}
             </button>
           ))}
         </div>
