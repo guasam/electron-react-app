@@ -111,7 +111,6 @@ export function StreamPage() {
 
   return (
     <PageShell
-      badge="Streaming · stream()"
       title="Streaming responses"
       description="An async-generator handler pushes tokens to the renderer as they are produced (the exact pattern an LLM app needs), over one typed channel, with built-in cancellation."
     >

@@ -1,5 +1,6 @@
 import { MessageSquare, Folder, Activity, Copy, Shield, ArrowRight, type LucideIcon } from 'lucide-react'
 import { type PageProps } from '../registry'
+import { TipTicker } from '../components/tip-ticker'
 
 interface Strip {
   id: string
@@ -49,78 +50,56 @@ const STRIPS: Strip[] = [
 
 export function Overview({ onNavigate }: PageProps) {
   return (
-    <div className="px-10 pt-[34px] pb-10">
-      {/* eyebrow */}
-      <div className="mb-[26px] flex items-center gap-3">
-        <span className="font-mono text-[10px] tracking-[0.08em] text-muted-foreground">CONVEYOR / OVERVIEW</span>
-        <div className="h-px flex-1 bg-border" />
-        <span className="rounded-[5px] border border-brand px-2 py-1 font-mono text-[10px] font-medium text-brand">
-          electron-conveyor
-        </span>
-      </div>
-
-      {/* hero */}
-      <h1 className="max-w-[15ch] text-[52px] leading-[1.02] font-semibold tracking-[-0.035em]">
-        Type-safe IPC,
-        <br />
-        one source of{' '}
-        <span className="relative inline-block">
-          <span className="absolute right-[-2px] bottom-[4px] left-[-2px] h-[11px] bg-brand opacity-90" />
-          <span className="relative">truth.</span>
-        </span>
-      </h1>
-      <p className="mt-5 max-w-[58ch] text-[15.5px] leading-[1.6] text-pretty text-muted-foreground">
-        Cross-window state for Electron with end-to-end inference. Every page below is a real capability, running live,
-        next to the code that drives it.
-      </p>
-
-      {/* capability strips */}
-      <div className="mt-9 flex flex-col gap-[9px]">
-        {STRIPS.map((s, i) => {
-          const Icon = s.icon
-          const Preview = s.preview
-          return (
-            <button
-              key={s.id}
-              onClick={() => onNavigate(s.id)}
-              className="group flex transform-gpu items-center gap-4 rounded-xl border border-border bg-card px-[18px] py-4 text-left transition-transform duration-200 ease-out hover:translate-x-1 hover:border-brand"
-            >
-              <span className="w-4 flex-none font-mono text-[10px] text-muted-foreground/60">
-                {String(i + 1).padStart(2, '0')}
-              </span>
-              <span className="flex size-[34px] flex-none items-center justify-center rounded-[9px] border border-border bg-muted text-brand">
-                <Icon className="size-4" />
-              </span>
-              <span className="min-w-0 flex-1">
-                <span className="block text-[14.5px] font-semibold tracking-[-0.01em]">{s.title}</span>
-                <span className="mt-[3px] block text-[12.5px] leading-[1.4] text-muted-foreground">{s.desc}</span>
-              </span>
-              <span className="flex-none">
-                <Preview />
-              </span>
-              <ArrowRight className="size-3.5 flex-none text-muted-foreground/60 transition-transform group-hover:translate-x-0.5" />
-            </button>
-          )
-        })}
-      </div>
-
-      {/* branch footer */}
-      <div className="mt-7 flex items-start gap-3.5 rounded-xl border border-dashed border-border-bright p-[18px]">
-        <span className="mt-0.5 font-mono text-[10px] text-brand">BUILD</span>
-        <p className="text-[12.5px] leading-[1.6] text-muted-foreground">
-          You are on the <Code>demo</Code> branch. Ready to build your own app? Switch to <Code>main</Code> for the
-          clean themed shell: <Code>git switch main</Code>, then <Code>npm install</Code>.
+    <div className="flex min-h-full flex-col">
+      <div className="flex-1 px-10 pt-[60px] pb-10">
+        {/* hero */}
+        <h1 className="max-w-[15ch] text-[52px] leading-[1.02] font-semibold tracking-[-0.035em]">
+          Type-safe IPC,
+          <br />
+          one source of{' '}
+          <span className="relative inline-block">
+            <span className="absolute right-[-2px] bottom-[4px] left-[-2px] h-[11px] bg-brand opacity-90" />
+            <span className="relative">truth.</span>
+          </span>
+        </h1>
+        <p className="mt-5 max-w-[58ch] text-[15.5px] leading-[1.6] text-pretty text-muted-foreground">
+          Cross-window state for Electron with end-to-end inference. Every page below is a real capability, running
+          live, next to the code that drives it.
         </p>
-      </div>
-    </div>
-  )
-}
 
-function Code({ children }: { children: React.ReactNode }) {
-  return (
-    <code className="rounded-[4px] bg-muted px-[5px] py-0.5 font-mono text-[11.5px] text-foreground/80">
-      {children}
-    </code>
+        {/* capability strips */}
+        <div className="mt-9 flex flex-col gap-[9px]">
+          {STRIPS.map((s, i) => {
+            const Icon = s.icon
+            const Preview = s.preview
+            return (
+              <button
+                key={s.id}
+                onClick={() => onNavigate(s.id)}
+                className="group flex transform-gpu items-center gap-4 rounded-xl border border-border bg-card px-[18px] py-4 text-left transition-transform duration-200 ease-out hover:translate-x-1 hover:border-brand"
+              >
+                <span className="w-4 flex-none font-mono text-[10px] text-muted-foreground/60">
+                  {String(i + 1).padStart(2, '0')}
+                </span>
+                <span className="flex size-[34px] flex-none items-center justify-center rounded-[9px] border border-border bg-muted text-brand">
+                  <Icon className="size-4" />
+                </span>
+                <span className="min-w-0 flex-1">
+                  <span className="block text-[14.5px] font-semibold tracking-[-0.01em]">{s.title}</span>
+                  <span className="mt-[3px] block text-[12.5px] leading-[1.4] text-muted-foreground">{s.desc}</span>
+                </span>
+                <span className="flex-none">
+                  <Preview />
+                </span>
+                <ArrowRight className="size-3.5 flex-none text-muted-foreground/60 transition-transform group-hover:translate-x-0.5" />
+              </button>
+            )
+          })}
+        </div>
+      </div>
+
+      <TipTicker onSelect={onNavigate} />
+    </div>
   )
 }
 

@@ -47,7 +47,6 @@ export function AnalyzerPage() {
 
   return (
     <PageShell
-      badge="Command + Stream · analyzer.scan()"
       title="Folder analyzer"
       description="A typed command opens the native folder dialog, then a stream walks the folder in the main process and pushes live progress until the size breakdown arrives. Try a projects folder; node_modules never disappoints."
     >

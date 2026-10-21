@@ -43,7 +43,6 @@ export function SecurePage() {
 
   return (
     <PageShell
-      badge="Middleware + Context · query.use()"
       title="A guarded procedure"
       description="readSecret is built on a guarded base (query.use(requireUnlocked)) and reads the app context. Read it locked (it throws a typed LOCKED error), unlock with 1234, read again."
     >

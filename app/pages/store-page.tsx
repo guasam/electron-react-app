@@ -28,7 +28,6 @@ export function StorePage() {
 
   return (
     <PageShell
-      badge="Cross-window store · defineStore"
       title="Shared state across windows"
       description="Main owns the state; every window mirrors it live. Open a second window, then change the counter or notes and watch both windows stay in sync. Your pointer is shared too: move it around and watch it glide through the other window as a ghost cursor."
     >

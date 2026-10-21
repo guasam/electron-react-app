@@ -10,7 +10,6 @@ export function SystemPage() {
 
   return (
     <PageShell
-      badge="Query · useQuery()"
       title="Live system monitor"
       description="A typed procedure reads real main-process system info; TanStack Query caches it and refetches every 1.5s. Watch the memory bar move."
     >
