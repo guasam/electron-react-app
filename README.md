@@ -82,8 +82,7 @@ with the shell still around it, ready for your app.
 ### Try the demo
 
 Want to see everything the stack can do first? The **`demo`** branch is an interactive playground of
-every IPC primitive (cross-window state, streaming, background tasks, middleware), with the real
-source behind each demo:
+every IPC primitive (streaming, a folder scan, a system monitor, cross-window state, and middleware):
 
 ```bash
 git switch demo

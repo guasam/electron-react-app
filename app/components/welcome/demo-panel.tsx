@@ -40,7 +40,7 @@ export function DemoPanel() {
         <h1 className="mt-3 text-2xl font-semibold tracking-tight">See the whole thing running</h1>
         <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
           The same shell you are looking at, with a page per primitive. Each one is a working feature rather than a
-          snippet, and a drawer shows the real source behind it.
+          snippet.
         </p>
       </div>
 
