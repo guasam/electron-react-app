@@ -18,7 +18,7 @@ export interface StackEntry {
 export const STACK: StackEntry[] = [
   {
     id: 'overview',
-    color: '#ff5c3a',
+    color: '#3a9bff',
     label: 'Overview',
     icon: Sparkles,
     hero: true,
@@ -46,7 +46,7 @@ export const STACK: StackEntry[] = [
   },
   {
     id: 'conveyor',
-    color: '#ff5c3a',
+    color: '#3a9bff',
     label: 'Conveyor',
     icon: Cable,
     tagline: 'Typed IPC and live state across every window',
