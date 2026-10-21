@@ -1,4 +1,4 @@
-import { BrowserWindow, shell, app } from 'electron'
+import { BrowserWindow, shell, app, screen } from 'electron'
 import { join } from 'path'
 import { createWindowManager } from 'electron-conveyor/main'
 import appIcon from '@/resources/build/icon.png?asset'
@@ -9,22 +9,52 @@ export const windows = createWindowManager()
 
 let windowCount = 0
 
-/** Open a new tracked app window. `page` deep-links it onto an app page (via the URL hash). */
-export function openAppWindow(page?: string): BrowserWindow {
+/** Size a new window opens at, in px. */
+const WINDOW_WIDTH = 1100
+const WINDOW_HEIGHT = 768
+
+/** How far a window is shifted from the one it was opened from, in px, so both stay visible. */
+const CASCADE_OFFSET = 40
+
+/**
+ * Where a window opened from `opener` goes: nudged down and right, or up and left when that would
+ * push it past the edge of the display. Without it Electron centers every new window, which lands
+ * exactly on top of the last one.
+ */
+function cascadeFrom(opener: BrowserWindow): { x: number; y: number } {
+  const { x, y } = opener.getBounds()
+  const area = screen.getDisplayMatching(opener.getBounds()).workArea
+  const fitsRight = x + CASCADE_OFFSET + WINDOW_WIDTH <= area.x + area.width
+  const fitsBelow = y + CASCADE_OFFSET + WINDOW_HEIGHT <= area.y + area.height
+
+  return {
+    x: x + (fitsRight ? CASCADE_OFFSET : -CASCADE_OFFSET),
+    y: y + (fitsBelow ? CASCADE_OFFSET : -CASCADE_OFFSET),
+  }
+}
+
+/**
+ * Open a new tracked app window. `page` deep-links it onto an app page (via the URL hash), and
+ * `opener` is the window it was opened from, which the new one is offset from.
+ */
+export function openAppWindow(page?: string, opener?: BrowserWindow | null): BrowserWindow {
   windowCount += 1
   const label = windowCount === 1 ? 'main' : `window-${windowCount}`
-  return windows.register(label, createAppWindow(page))
+  const anchor = opener ?? BrowserWindow.getFocusedWindow()
+  return windows.register(label, createAppWindow(page, anchor ? cascadeFrom(anchor) : undefined))
 }
 
 /**
  * Create an app window. `hash` deep-links it: the renderer receives it as `location.hash`, so a
- * window can open straight onto a given route/view instead of the app's default.
+ * window can open straight onto a given route/view instead of the app's default. `position` places
+ * it on screen, and leaves it centered when omitted.
  */
-export function createAppWindow(hash?: string): BrowserWindow {
+export function createAppWindow(hash?: string, position?: { x: number; y: number }): BrowserWindow {
   // Create the main window.
   const mainWindow = new BrowserWindow({
-    width: 1100,
-    height: 768,
+    width: WINDOW_WIDTH,
+    height: WINDOW_HEIGHT,
+    ...position,
     minWidth: 720,
     minHeight: 520,
     show: false,

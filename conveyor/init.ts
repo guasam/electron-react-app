@@ -1,3 +1,4 @@
+import type { BrowserWindow } from 'electron'
 import { initConveyor } from 'electron-conveyor/define'
 import type { ConveyorWindowManager } from 'electron-conveyor/main'
 
@@ -11,8 +12,11 @@ export interface AppContext {
   appStartedAt: number
   /** The label→window registry — fan-out targets (`windows.broadcast`, `.except(sender)`, ...). */
   windows: ConveyorWindowManager
-  /** Open another app window, optionally deep-linked onto a page (via the URL hash). */
-  openWindow: (page?: string) => void
+  /**
+   * Open another app window, optionally deep-linked onto a page (via the URL hash). Pass the window
+   * it was opened from, and the new one is offset from it instead of landing on top.
+   */
+  openWindow: (page?: string, opener?: BrowserWindow | null) => void
 }
 
 /** Authoring primitives bound to `AppContext`. Modules import these instead of the bare package. */

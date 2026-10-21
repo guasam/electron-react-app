@@ -35,9 +35,10 @@ export function StorePage() {
         <Button
           variant={ready ? 'outline' : 'default'}
           className="w-fit"
+          disabled={ready}
           onClick={() => conveyor.windows.open('store')}
         >
-          <PanelLeftOpen className="size-4" /> Open 2nd window
+          <PanelLeftOpen className="size-4" /> {ready ? 'Second window open' : 'Open 2nd window'}
         </Button>
         {ready ? (
           <span className="flex items-center gap-1.5 text-xs text-success">
