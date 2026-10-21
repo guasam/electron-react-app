@@ -26,25 +26,25 @@ electron-conveyor for type-safe IPC and a smoother dev experience.
 
 ## Features
 
-- 🚀 **Electron** - Cross-platform desktop apps for Windows, macOS and Linux
-- ⚛️ **React** - Component-based UI library
-- 📦 **TypeScript** - Type-safe JavaScript across main, preload and renderer
-- 🎨 **Shadcn UI** - Beautiful and accessible components on Radix
-- 🌊 **TailwindCSS** - Utility-first CSS framework
-- ⚡ **Electron Vite** - Lightning-fast build tool, powered by Vite
-- 🛠️ **Electron Builder** - Packaging for Windows, macOS and Linux
-- 🔌 **Electron Conveyor** - Type-safe IPC, queries, commands, streams and events via [electron-conveyor](https://github.com/guasam/electron-conveyor)
-- 🔄 **Cross-window state** - Stores owned by main, synced live to every window, with opt-in persistence
-- 🪟 **Custom window shell** - Themed frame, titlebar and menus with keyboard shortcuts
-- 🌗 **Dark/Light mode** - Built-in theme switching
-- 🔥 **Fast HMR** - Instant renderer updates, and main and preload restart on save
-- 🛡️ **Error boundary** - Catches render errors with detailed reporting
-- 📐 **Clean project structure** - Separation of main, preload and renderer processes
-- 🧩 **Path aliases** - Keeps your code organized
-- 📁 **Resources protocol** - Load local resources from the renderer via `res://`
-- 🧹 **ESLint & Prettier** - Preconfigured for consistent code
-- 🐞 **VS Code debugging** - Launch configs for both main and renderer
-- 🧪 **Demo branch** - Interactive playground of every IPC primitive, while `main` stays minimal
+🔹 **Electron** - Cross-platform desktop apps for Windows, macOS and Linux<br />
+🔹 **React** - Component-based UI library<br />
+🔹 **TypeScript** - Type-safe JavaScript across main, preload and renderer<br />
+🔹 **Shadcn UI** - Beautiful and accessible components on Radix<br />
+🔹 **TailwindCSS** - Utility-first CSS framework<br />
+🔹 **Electron Vite** - Lightning-fast build tool, powered by Vite<br />
+🔹 **Electron Builder** - Packaging for Windows, macOS and Linux<br />
+🔹 **Electron Conveyor** - Type-safe IPC, queries, commands, streams and events via [electron-conveyor](https://github.com/guasam/electron-conveyor)<br />
+🔹 **Cross-window state** - Stores owned by main, synced live to every window, with opt-in persistence<br />
+🔹 **Custom window shell** - Themed frame, titlebar and menus with keyboard shortcuts<br />
+🔹 **Dark/Light mode** - Built-in theme switching<br />
+🔹 **Fast HMR** - Instant renderer updates, and main and preload restart on save<br />
+🔹 **Error boundary** - Catches render errors with detailed reporting<br />
+🔹 **Clean project structure** - Separation of main, preload and renderer processes<br />
+🔹 **Path aliases** - Keeps your code organized<br />
+🔹 **Resources protocol** - Load local resources from the renderer via `res://`<br />
+🔹 **ESLint & Prettier** - Preconfigured for consistent code<br />
+🔹 **VS Code debugging** - Launch configs for both main and renderer<br />
+🔹 **Demo branch** - Interactive playground of every IPC primitive, while `main` stays minimal
 
 <br />
 
