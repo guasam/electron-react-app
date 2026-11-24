@@ -30,15 +30,15 @@ jobs:
     name: Verify
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v6
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v6
         with:
-          node-version: 24
-          cache: npm
-      - run: npm ci
-      - run: npm run typecheck
-      - run: npm run lint:check
-      - run: npm run format:check
+          node-version: 26
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm run check
+      - run: pnpm audit --prod --audit-level=high
 
   build:
     name: Build (${{ matrix.os }})
@@ -51,15 +51,33 @@ jobs:
         os: [ubuntu-latest, macos-latest, windows-latest]
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v6
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v6
         with:
-          node-version: 24
-          cache: npm
-      - run: npm ci
+          node-version: 26
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Install Linux desktop runtime dependencies
+        if: runner.os == 'Linux'
+        run: pnpm exec playwright install-deps chromium
+      - run: pnpm run check:native
+      - run: pnpm run test:electron
       # Compiles main, preload and renderer. Catches path-separator and filename-case
       # bugs that a single dev machine never sees.
-      - run: npm run vite:build:app
+      - run: pnpm run vite:build:app
       # `--dir` produces an unpacked app and skips every packaging target, so no
       # installers, no signing, and no snapcraft on the Linux runner.
-      - run: npm run electron:build:dir
+      - run: pnpm run electron:build:dir
+      - name: Desktop flows (Windows and macOS)
+        if: runner.os != 'Linux'
+        run: pnpm exec playwright test
+      - name: Desktop flows (Linux)
+        if: runner.os == 'Linux'
+        run: xvfb-run -a pnpm exec playwright test
+      - name: Packaged persistence (Windows and macOS)
+        if: runner.os != 'Linux'
+        run: pnpm run test:packaged
+      - name: Packaged persistence (Linux)
+        if: runner.os == 'Linux'
+        run: xvfb-run -a pnpm run test:packaged

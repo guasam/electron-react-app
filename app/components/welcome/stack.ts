@@ -10,7 +10,7 @@ export interface StackEntry {
   tagline: string
   body: string[]
   highlights: { title: string; description: string }[]
-  docs: string
+  docs?: string
   /** Renders through the landing hero instead of the standard panel. Exactly one entry sets it. */
   hero?: boolean
   /** Leaves this entry out of the landing page's chip row. It still gets its sidebar row and panel. */
@@ -27,7 +27,6 @@ export const STACK: StackEntry[] = [
     tagline: 'A starting point, not a framework',
     body: [],
     highlights: [],
-    docs: 'https://github.com/guasam/electron-react-app',
   },
   {
     id: 'electron',
@@ -74,7 +73,7 @@ export const STACK: StackEntry[] = [
       'It pays off most at the process boundary, where a typo in a channel name would otherwise fail silently at runtime with nothing to catch it.',
     ],
     highlights: [
-      { title: 'Caught at build', description: 'npm run typecheck fails before a broken build ships' },
+      { title: 'Caught at build', description: 'pnpm run typecheck fails before a broken build ships' },
       { title: 'Editor knows the shape', description: 'Completion and rename work across process boundaries' },
       { title: 'Inference first', description: 'Most types are derived, not written by hand' },
     ],
@@ -121,7 +120,6 @@ export const STACK: StackEntry[] = [
         description: 'createCaller runs procedures in process, middleware included',
       },
     ],
-    docs: 'https://github.com/guasam/electron-react-app',
   },
   {
     id: 'tailwind',

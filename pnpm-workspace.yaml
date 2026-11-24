@@ -1,0 +1,29 @@
+pmOnFail: download
+engineStrict: true
+strictDepBuilds: true
+
+# Official Node distribution endpoint; also works where /download/release is blocked.
+nodeDownloadMirrors:
+  release: https://nodejs.org/dist/
+
+# Only reviewed dependency scripts may run. SQLite 13 ships its native binaries.
+allowBuilds:
+  '@tailwindcss/oxide': true
+  better-sqlite3: false
+  electron: true
+  electron-winstaller: true
+  esbuild: true
+# Exact fresh releases selected during this dependency update; retain the default age policy otherwise.
+minimumReleaseAgeExclude:
+  - '@typescript-eslint/eslint-plugin@8.74.0'
+  - '@typescript-eslint/parser@8.74.0'
+  - '@typescript-eslint/project-service@8.74.0'
+  - '@typescript-eslint/scope-manager@8.74.0'
+  - '@typescript-eslint/tsconfig-utils@8.74.0'
+  - '@typescript-eslint/type-utils@8.74.0'
+  - '@typescript-eslint/types@8.74.0'
+  - '@typescript-eslint/typescript-estree@8.74.0'
+  - '@typescript-eslint/utils@8.74.0'
+  - '@typescript-eslint/visitor-keys@8.74.0'
+  - lucide-react@1.79.0
+  - typescript-eslint@8.74.0

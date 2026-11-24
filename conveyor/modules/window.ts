@@ -4,6 +4,9 @@ import { defineModule, query, command, event } from '../init'
 import { createEmitter } from 'electron-conveyor/main'
 
 export const windowModule = defineModule({
+  open: command(({ ctx }) => {
+    ctx.openWindow()
+  }),
   init: query(({ ctx }) => {
     const win = ctx.window
     if (!win) throw new Error('window.init called without an owning window')

@@ -1,15 +1,19 @@
 import eslint from '@eslint/js'
+import { defineConfig } from 'eslint/config'
 import tseslint from 'typescript-eslint'
-import reactPlugin from 'eslint-plugin-react'
 import reactHooksPlugin from 'eslint-plugin-react-hooks'
 
-export default [
+export default defineConfig([
   {
     ignores: [
       'node_modules/**',
       'dist/**',
       'build/**',
       'out/**',
+      '.superpowers/**',
+      'test-results/**',
+      'playwright-report/**',
+      'coverage/**',
       'scripts/**', // plain node build scripts, outside the tsconfig project
 
       '.vscode/**',
@@ -25,8 +29,8 @@ export default [
   {
     files: ['**/*.{js,mjs,jsx,ts,tsx}'],
     plugins: {
-      react: reactPlugin,
-      'react-hooks': reactHooksPlugin,
+      // Register the rules we use; the package's nested legacy presets do not match ESLint 10's config type.
+      'react-hooks': { meta: reactHooksPlugin.meta, rules: reactHooksPlugin.rules },
     },
     languageOptions: {
       ecmaVersion: 'latest',
@@ -64,14 +68,8 @@ export default [
         React: 'readonly',
       },
     },
-    settings: {
-      react: {
-        version: 'detect',
-      },
-    },
     rules: {
       // React specific rules
-      'react/react-in-jsx-scope': 'off',
       'react-hooks/rules-of-hooks': 'error',
       'react-hooks/exhaustive-deps': 'warn',
 
@@ -108,4 +106,4 @@ export default [
       },
     },
   },
-]
+])

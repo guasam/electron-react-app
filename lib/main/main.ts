@@ -1,52 +1,110 @@
-import { app, BrowserWindow } from 'electron'
+import { app, BrowserWindow, dialog, type IpcMainInvokeEvent } from 'electron'
 import { electronApp, optimizer } from '@electron-toolkit/utils'
-import { openAppWindow } from './app'
-import { registerResourcesProtocol } from './protocols'
+import { join, resolve, isAbsolute } from 'node:path'
+import { mkdirSync } from 'node:fs'
+import { createAppWindows } from './app'
+import { registerAppSchemes, registerAppProtocols } from './protocols'
+import { isAllowedCaller, isAppDocument } from './sender-policy'
+import { openDatabase } from './infrastructure/database/database'
+import { createBusinessHost, type BusinessHost } from './bootstrap/container'
+import { publicFailure } from './bootstrap/operations'
+import { registerRouter } from '../../conveyor/router'
+import { QuitCoordinator } from './bootstrap/lifecycle'
 
-// Chromium only auto-detects a keyring on desktops it recognizes, so on anything else (Hyprland,
-// sway, bare WMs) safeStorage silently degrades to `basic_text` and reports itself unavailable.
-// Naming the backend opts back in where a secret service is actually running; if none is, Chromium
-// falls back on its own. Must run before the app is ready.
 if (process.platform === 'linux') app.commandLine.appendSwitch('password-store', 'gnome-libsecret')
-
-// This method will be called when Electron has finished
-// initialization and is ready to create browser windows.
-// Some APIs can only be used after this event occurs.
-app.whenReady().then(() => {
-  // Set app user model id for windows
-  electronApp.setAppUserModelId('com.electron')
-
-  // Register the custom resources protocol once. The IPC surface (modules, stores, context) is
-  // registered by the `@/conveyor/router` import side-effect via ./app.
-  registerResourcesProtocol()
-
-  // Open the main window.
-  openAppWindow()
-
-  // Default open or close DevTools by F12 in development
-  // and ignore CommandOrControl + R in production.
-  // see https://github.com/alex8088/electron-toolkit/tree/master/packages/utils
-  app.on('browser-window-created', (_, window) => {
-    optimizer.watchWindowShortcuts(window)
-  })
-
-  app.on('activate', function () {
-    // On macOS it's common to re-create a window in the app when the
-    // dock icon is clicked and there are no other windows open.
-    if (BrowserWindow.getAllWindows().length === 0) {
-      openAppWindow()
-    }
-  })
-})
-
-// Quit when all windows are closed, except on macOS. There, it's common
-// for applications and their menu bar to stay active until the user quits
-// explicitly with Cmd + Q.
+registerAppSchemes()
+const profile =
+  process.env.STARTER_PROFILE_DIRECTORY ??
+  (app.isPackaged ? app.getPath('userData') : `${app.getPath('userData')}-development`)
+if (!isAbsolute(profile)) throw new Error('STARTER_PROFILE_DIRECTORY must be absolute.')
+mkdirSync(profile, { recursive: true })
+app.setPath('userData', profile)
+const ownsProfile = app.requestSingleInstanceLock()
+let business: BusinessHost | undefined, startup: Promise<void> | undefined
+const lifecycle = new QuitCoordinator(
+  async () => {
+    await startup
+    await business?.shutdown()
+  },
+  () => app.quit(),
+  (error) => console.error('Shutdown failed:', error)
+)
+if (!ownsProfile) app.quit()
+else {
+  app.on('browser-window-created', (_, window) => optimizer.watchWindowShortcuts(window))
+  startup = app
+    .whenReady()
+    .then(async () => {
+      if (lifecycle.isStopping) return
+      electronApp.setAppUserModelId('com.electron.business-starter')
+      const entry =
+        !app.isPackaged && process.env.ELECTRON_RENDERER_URL
+          ? new URL(process.env.ELECTRON_RENDERER_URL).href
+          : 'app://starter/index.html'
+      registerAppProtocols(join(__dirname, '../renderer'), join(__dirname, '../../resources'))
+      const protectedDirectory = join(profile, 'database')
+      const database = await openDatabase({
+        filename: join(protectedDirectory, 'app.sqlite'),
+        migrationsFolder: app.isPackaged ? join(process.resourcesPath, 'drizzle') : resolve(__dirname, '../../drizzle'),
+      })
+      if (lifecycle.isStopping) {
+        database.close()
+        return
+      }
+      try {
+        business = createBusinessHost(database, protectedDirectory)
+        const windows = createAppWindows(entry)
+        const allowed = (event: IpcMainInvokeEvent) => {
+          const sender = event.sender,
+            frame = event.senderFrame
+          return (
+            !sender.isDestroyed() &&
+            !!frame &&
+            isAllowedCaller({
+              registered: windows.manager.all().some((window) => window.webContents === sender),
+              topFrame: frame === sender.mainFrame,
+              senderUrl: sender.getURL(),
+              frameUrl: frame.url,
+              entry,
+            })
+          )
+        }
+        registerRouter(
+          { windows: windows.manager, openWindow: windows.open, appStartedAt: Date.now(), business },
+          allowed,
+          (url) => isAppDocument(url, entry)
+        )
+        windows.open()
+        app.on('second-instance', () => {
+          const win = windows.manager.all()[0]
+          if (win) {
+            if (win.isMinimized()) win.restore()
+            win.focus()
+          }
+        })
+        app.on('activate', () => {
+          if (!BrowserWindow.getAllWindows().length && !lifecycle.isStopping) windows.open()
+        })
+      } catch (error) {
+        await business?.shutdown()
+        database.close()
+        throw error
+      }
+    })
+    .catch((error) => {
+      console.error('Startup failed:', error)
+      const failure = publicFailure(error)
+      if (!lifecycle.isStopping)
+        dialog.showErrorBox(
+          'Unable to start',
+          `${failure.message}\nYour data has not been reset. See docs/database-recovery.md for recovery instructions.`
+        )
+      app.exit(1)
+    })
+}
 app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
-    app.quit()
-  }
+  if (process.platform !== 'darwin') app.quit()
 })
-
-// In this file, you can include the rest of your app's specific main process
-// code. You can also put them in separate files and import them here.
+app.on('before-quit', (event) => {
+  if (ownsProfile) lifecycle.beforeQuit(event)
+})

@@ -1,5 +1,3 @@
-import { ArrowUpRight } from 'lucide-react'
-import { conveyor } from '@/conveyor/client'
 import { STACK, type StackEntry } from './stack'
 import { TipTicker } from './tips'
 
@@ -42,14 +40,6 @@ export function Hero({ entry, onSelect }: { entry: StackEntry; onSelect: (id: st
           <span className="font-mono text-foreground/70">&lt;Welcome /&gt;</span> line in{' '}
           <span className="font-mono text-foreground/70">app.tsx</span> for an empty window.
         </p>
-
-        <button
-          onClick={() => conveyor.web.openUrl(entry.docs)}
-          className="mt-5 inline-flex items-center gap-1.5 text-[13px] text-muted-foreground transition-colors hover:text-brand"
-        >
-          Documentation
-          <ArrowUpRight className="size-3.5" />
-        </button>
       </div>
 
       <TipTicker onSelect={onSelect} />

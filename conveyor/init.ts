@@ -1,5 +1,6 @@
 import { initConveyor } from 'electron-conveyor/define'
 import type { ConveyorWindowManager } from 'electron-conveyor/main'
+import type { BusinessHost } from '../lib/main/bootstrap/container'
 
 /**
  * The app's custom handler context, merged onto the base electron fields (`event`, `sender`,
@@ -13,6 +14,8 @@ export interface AppContext {
   windows: ConveyorWindowManager
   /** Open another app window, optionally deep-linked onto a page (via the URL hash). */
   openWindow: (page?: string) => void
+  business: BusinessHost
+  notifySettingsChanged: () => void
 }
 
 /** Authoring primitives bound to `AppContext`. Modules import these instead of the bare package. */

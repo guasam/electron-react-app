@@ -1,6 +1,14 @@
 {
   "extends": "@electron-toolkit/tsconfig/tsconfig.web.json",
-  "include": ["app/index.d.ts", "app/**/*", "lib/**/*", "conveyor/**/*", "resources/**/*"],
+  "include": [
+    "app/index.d.ts",
+    "app/**/*",
+    "lib/**/*",
+    "conveyor/**/*",
+    "resources/**/*",
+    "modules/**/*",
+    "shared/**/*"
+  ],
   "compilerOptions": {
     "composite": true,
     "jsx": "react-jsx",

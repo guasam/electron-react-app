@@ -1,11 +1,22 @@
-appId: com.guasam.era
+appId: com.electron.business-starter
 productName: electron-react-app
 asar: true
 asarUnpack:
   - resources/**
+  - node_modules/better-sqlite3/prebuilds/**
+extraResources:
+  - from: drizzle
+    to: drizzle
+    filter:
+      - '**/*.sql'
+      - meta/_journal.json
 directories:
   buildResources: resources/build
 files:
+  - out/**
+  - resources/**
+  - package.json
+  - LICENSE
   - '!**/.vscode/*'
   - '!src/*'
   - '!electron.vite.config.{js,ts,mjs,cjs}'

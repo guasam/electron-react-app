@@ -1,266 +1,90 @@
-# Electron React App
+# Electron Business Starter
 
-A modern Electron starter kit with React, Vite and TypeScript, built around
-electron-conveyor for type-safe IPC and a smoother dev experience.
+An Electron, React, TypeScript, Tailwind and Shadcn UI starter with a working business feature. Awilix assembles constructor-injected services; Drizzle manages a local SQLite database. Settings demonstrates the complete renderer -> typed IPC -> application -> repository -> SQLite path, plus filesystem access behind its own repository.
 
-<br />
+## Start developing
 
-<p align="center">
-    <img src="app/assets/era-welcome.png" width="1164" alt="Electron React App" />
-</p>
+Use pnpm (see [installation](https://pnpm.io/installation) if it is unavailable). The `packageManager` field selects pnpm 12.23.0 for this repository. Compatible pnpm launchers switch to that version automatically; an older launcher may need updating to support it. This project pin leaves other repositories' package-manager choices independent. Installation also provisions the pinned Node.js 26 LTS development runtime locally. From this checkout:
 
-<br />
-
-<div align="center">
-
-![Electron](https://img.shields.io/badge/Electron-v45.0.0-blue) &nbsp;
-![React](https://img.shields.io/badge/React-v19.3.1-blue) &nbsp;
-![TypeScript](https://img.shields.io/badge/TypeScript-v6.0.3-blue) &nbsp;
-![Vite](https://img.shields.io/badge/Vite-v7.3.7-blue) &nbsp;
-![Tailwind](https://img.shields.io/badge/Tailwind-v4.3.3-blue) &nbsp;
-![Conveyor](https://img.shields.io/badge/Conveyor-v0.4.1-1f83ea)
-
-</div>
-
-<br />
-
-## Features
-
-🔹 **Electron** - Cross-platform desktop apps for Windows, macOS and Linux<br />
-🔹 **React** - Component-based UI library<br />
-🔹 **TypeScript** - Type-safe JavaScript across main, preload and renderer<br />
-🔹 **Shadcn UI** - Beautiful and accessible components on Radix<br />
-🔹 **TailwindCSS** - Utility-first CSS framework<br />
-🔹 **Electron Vite** - Lightning-fast build tool, powered by Vite<br />
-🔹 **Electron Builder** - Packaging for Windows, macOS and Linux<br />
-🔹 **Electron Conveyor** - Type-safe IPC, queries, commands, streams and events via [electron-conveyor](https://github.com/guasam/electron-conveyor)<br />
-🔹 **Cross-window state** - Stores owned by main, synced live to every window, with opt-in persistence<br />
-🔹 **Custom window shell** - Themed frame, titlebar and menus with keyboard shortcuts<br />
-🔹 **Dark/Light mode** - Built-in theme switching<br />
-🔹 **Fast HMR** - Instant renderer updates, and main and preload restart on save<br />
-🔹 **Error boundary** - Catches render errors with detailed reporting<br />
-🔹 **Clean project structure** - Separation of main, preload and renderer processes<br />
-🔹 **Path aliases** - Keeps your code organized<br />
-🔹 **Resources protocol** - Load local resources from the renderer via `res://`<br />
-🔹 **ESLint & Prettier** - Preconfigured for consistent code<br />
-🔹 **VS Code debugging** - Launch configs for both main and renderer<br />
-🔹 **Demo branch** - Interactive playground of every IPC primitive, while `main` stays minimal
-
-<br />
-
-## Quick start
-
-```bash
-git clone https://github.com/guasam/electron-react-app
-cd electron-react-app
-
-# any package manager works: npm, yarn, pnpm, bun
-npm install
-npm run dev
+```sh
+pnpm install
+pnpm dev
 ```
 
-That starts Electron with hot reload. `main` is deliberately minimal (a themed window frame,
-titlebar, menus and the typed IPC layer) so you can start building on top of it right away.
+Installation downloads Electron automatically through `postinstall`. SQLite uses the driver's bundled Node-API binaries on supported desktop architectures. There is no separate setup command or C++ rebuild step. Use pnpm for all package operations; `pnpm-lock.yaml` is the sole lockfile, and CI installs with `pnpm install --frozen-lockfile`.
 
-<br />
+Reviewed dependency build permissions live in [pnpm-workspace.yaml](pnpm-workspace.yaml). When adding a dependency with an install script, inspect it and update that policy deliberately. TypeScript remains on the latest supported 6.0 patch because the current lint parser requires `<6.1`; other direct dependencies use current compatible stable releases.
 
-### Removing the welcome screen
+The Settings screen supports creating key/value pairs, editing values, cursor navigation, confirmed deletion, full restart persistence and two-window conflict recovery. Keys are unique and immutable; values are plain text up to 5,000 characters. Native JSON import/export supports at most 1,000 settings and 5 MiB; import merges by key and replaces existing values atomically. Archives are not database backups. The original Stack tour remains available in navigation.
 
-The window opens on a short tour of the stack. It is the one piece meant to be thrown away, and it
-is built so that removing it costs nothing: it lives entirely in `app/components/welcome`, nothing
-else imports it, and it adds no IPC modules of its own.
+## Structure
 
-```bash
-rm -rf app/components/welcome
+```text
+app/features/settings/          React views, editor, query hooks
+conveyor/modules/settings.ts    Thin typed IPC handlers
+modules/settings/
+  domain/                    Models, rules, repository interfaces
+  application/               Constructor-injected business services
+  contracts/                 Portable IPC DTOs and archive format
+  infrastructure/            Drizzle and filesystem implementations
+  providers.ts               Explicit Awilix factories
+shared/domain/               Application errors, clock and ID ports
+lib/main/bootstrap/          Composition root and operation lifecycle
+lib/main/infrastructure/     SQLite resource and native chooser
+lib/preload/                 Minimal allowlisted bridge
+drizzle/                     Generated SQL and migration metadata
+tests/                       Unit, integration, React and desktop suites
 ```
 
-Then drop the `<Welcome />` line and its import from `app/app.tsx`. What is left is an empty window
-with the shell still around it, ready for your app.
+Domain and application code do not resolve the container or import Electron/Drizzle. External access is behind feature-owned interfaces. Infrastructure maps external data; IPC selects DTO fields and exposes safe errors. Architecture tests enforce dependency direction.
 
-<br />
+## Commands
 
-### Try the demo
+| Command                                            | Purpose                                                    |
+| -------------------------------------------------- | ---------------------------------------------------------- |
+| `pnpm run check`                                   | Types, lint, formatting and fast tests                     |
+| `pnpm test`                                        | Unit, real SQLite/filesystem, React and boundary tests     |
+| `pnpm run test:watch`                              | Watch fast tests                                           |
+| `pnpm run check:native`                            | Real in-memory SQLite query under Electron                 |
+| `pnpm run test:electron`                           | Fast tests under Electron's Node runtime                   |
+| `pnpm run test:desktop`                            | Build and exercise real Electron flows                     |
+| `pnpm run build:unpack`                            | Unpacked app for the current OS                            |
+| `pnpm run test:packaged`                           | Persistence smoke test against that package                |
+| `pnpm run db:generate`                             | Generate migrations after schema edits                     |
+| `pnpm run db:studio`                               | Inspect an explicit `STARTER_DATABASE_PATH` development DB |
+| `pnpm run build:win` / `build:mac` / `build:linux` | Distribution targets                                       |
 
-Want to see everything the stack can do first? The **`demo`** branch is an interactive playground of
-every IPC primitive (streaming, a folder scan, a system monitor, cross-window state, and middleware):
+Migrations run at startup before business IPC/windows are available. Do not use schema push against existing profiles. Signing, notarization and publishing remain downstream deployment choices; the builder produces unsigned development artifacts.
 
-```bash
-git switch demo
-npm install
-npm run dev
+## What installation does
+
+`pnpm install` installs the locked dependencies and runs the project's `postinstall` command, `install-electron`, to download/extract the selected Electron executable. The local development Node runtime is recorded with its checksum in the lockfile; Electron ships its own separate runtime.
+
+`pnpm run check:native` optionally verifies the native driver by running Electron in Node mode, loading better-sqlite3, querying `sqlite_version()` in memory, closing the connection and exiting. Linux needs its desktop system libraries installed before executing Electron; downloading it does not require a display.
+
+Installation and the native check do not create the application's database, run migrations, seed settings or start the UI. Application startup owns database creation/migration.
+
+## Profiles and data
+
+The initial migration creates only `settings` (key, value, generation token, created/updated timestamps, version), plus Drizzle migration bookkeeping. The database is `<userData>/database/app.sqlite`. Development appends `-development` to Electron's default userData path; packaged apps use the normal platform-specific userData directory. One process owns each profile; a second launch focuses the existing instance. Separate profiles run independently.
+
+Override the profile with an **absolute** `STARTER_PROFILE_DIRECTORY` for isolated development. Tests must never use a normal profile. Change application identity/product settings before distributing a clone so unrelated apps do not share packaged data.
+
+```powershell
+$env:STARTER_PROFILE_DIRECTORY = 'D:\scratch\my-electron-profile'
+pnpm dev
 ```
 
-Switch back to `main` and re-run `npm install` when you are ready to build.
+This unreleased baseline replaces the former example migration. Existing trial profiles using that history remain untouched and are incompatible; select a fresh profile with `STARTER_PROFILE_DIRECTORY`. Future released migration histories must remain immutable.
 
-<br />
+Existing-profile upgrades validate migration history and create a SQLite recovery snapshot. Incompatible/newer histories stop startup without resetting data. Read [database and recovery](docs/database-recovery.md) before touching a real profile.
 
-## Conveyor: Type-safe IPC
+## Extend the starter
 
-IPC is powered by [electron-conveyor](https://github.com/guasam/electron-conveyor). One definition
-in main is the single source of truth for a feature, and the renderer client is _inferred_ from it.
+- [Architecture and dependency injection](docs/architecture.md): SOLID, scopes, transactions and data flow.
+- [Add or remove a feature](docs/adding-a-feature.md): actual Settings files and an HTTP integration pattern.
+- [Testing](docs/testing.md): suite boundaries, commands and safe desktop tests.
+- [Database and recovery](docs/database-recovery.md): migrations, snapshots and restoration.
+- [Verification evidence](docs/verification.md): local results and platform limits.
 
-| You want                          | Use             | Renderer side                                             |
-| --------------------------------- | --------------- | --------------------------------------------------------- |
-| Read something from main          | `query()`       | `await conveyor.x.y()` or `.useQuery()`                   |
-| Tell main to do something         | `command()`     | `await conveyor.x.y()` or `.useMutation()`                |
-| Chunks pushed as they're produced | `stream()`      | `for await (const c of conveyor.x.y())` or `.useStream()` |
-| Main pushing to the renderer      | `event()`       | `conveyor.x.y.subscribe(cb)` or `.useEvent(cb)`           |
-| State shared live across windows  | `defineStore()` | `useConveyorStore(store)`                                 |
-
-<br />
-
-### Adding a feature takes two edits
-
-**1. Define the module** in `conveyor/modules/`:
-
-```ts
-// conveyor/modules/notes.ts — runs in MAIN only
-import { z } from 'zod'
-import { defineModule, query, command } from '../init'
-
-export const notesModule = defineModule({
-  list: query(() => readNotes()),
-
-  // input crosses the trust boundary → schema required, validated on every call
-  save: command(z.object({ title: z.string(), body: z.string() }), ({ input }) => saveNote(input)),
-})
-```
-
-**2. Register it** in `conveyor/router.ts`:
-
-```ts
-export const router = createRouter(
-  {
-    window: windowModule,
-    web: webModule,
-    notes: notesModule, // ← the key becomes the module id
-  },
-  { createContext, use: [devLogger] }
-)
-```
-
-That's it. The renderer client already knows it, fully typed:
-
-```tsx
-import { conveyor } from '@/conveyor/client'
-
-function Notes() {
-  const notes = conveyor.notes.list.useQuery() // key derived from the path — never hand-written
-  const save = conveyor.notes.save.useMutation({
-    onSuccess: () => conveyor.notes.list.invalidate(),
-  })
-
-  return <button onClick={() => save.mutate({ title: 'Hi', body: '...' })}>Save</button>
-}
-```
-
-Outside React, every member is a plain typed call: `await conveyor.notes.list()`.
-
-<br />
-
-## Error boundary
-
-Failures re-throw in the renderer as `ConveyorError` with a stable `code`. Conveyor reserves
-`UNKNOWN_PROCEDURE`, `INVALID_INPUT`, `INVALID_OUTPUT` and `HANDLER_ERROR`; anything your handler
-throws deliberately keeps its own code:
-
-```ts
-// main
-throw new ConveyorError('LOCKED', 'Unlock the vault first')
-
-// renderer
-try {
-  await conveyor.vault.open()
-} catch (err) {
-  if (err instanceof ConveyorError && err.code === 'LOCKED') promptUnlock()
-}
-```
-
-Branch on `err.code`, never on message strings. Validation failures also carry `err.issues` with
-the Standard Schema detail, so you can map them onto form fields. The `demo` branch's
-**Middleware** page has a working example.
-
-> **Streams, Events, Middleware and the full Conveyor API reference** live in the
-> **[electron-conveyor](https://github.com/guasam/electron-conveyor)** repo, and our `demo` branch
-> has a working example for each one.
-
-<br />
-
-## Window shell
-
-The starter kit ships a custom window implementation: titlebar with app icon, window controls,
-a menu system with keyboard shortcuts, and a dark/light toggle. It works on Windows, macOS and
-Linux.
-
-The titlebar menu toggles with `Alt` on Windows and Linux, `Option (⌥)` on macOS. Edit the items in
-`app/shell/menu.ts`.
-
-<br />
-
-## Building for production
-
-```bash
-npm run build:win     # Windows
-npm run build:mac     # macOS
-npm run build:linux   # Linux
-npm run build:unpack  # unpacked, all platforms
-```
-
-<br />
-
-## Path aliases
-
-```ts
-import { Button } from '@/app/components/ui/button'
-import { conveyor } from '@/conveyor/client'
-```
-
-| Alias          | Points to                      |
-| -------------- | ------------------------------ |
-| `@/app/`       | `app/` (renderer)              |
-| `@/lib/`       | `lib/` (main + preload)        |
-| `@/conveyor/`  | `conveyor/` (the IPC surface)  |
-| `@/resources/` | `resources/` (build resources) |
-
-<br />
-
-## Project structure
-
-```bash
-├── app/                        # Renderer process (React)
-│   ├── assets/                 # Images and other static assets
-│   ├── components/
-│   │   ├── ui/                 # Shadcn UI components
-│   │   ├── welcome/            # Welcome screen, safe to delete
-│   │   └── error-boundary.tsx  # Render error reporting
-│   ├── shell/                  # Window frame, titlebar, menus and theme
-│   │   └── menu.ts             # Titlebar menu items
-│   ├── styles/
-│   │   ├── app.css             # App stylesheet
-│   │   └── globals.css         # Tailwind setup and theme tokens
-│   ├── app.tsx                 # Root component
-│   ├── index.html              # Entry HTML file
-│   └── renderer.tsx            # Renderer process entry
-├── conveyor/                   # The IPC surface
-│   ├── modules/                # Feature modules (main process only)
-│   ├── client.ts               # Typed renderer client with hooks
-│   ├── init.ts                 # Authoring primitives bound to the app's context
-│   └── router.ts               # Registers modules, stores, middleware and context
-├── lib/
-│   ├── main/                   # Main process
-│   │   ├── app.ts              # Window creation and window manager
-│   │   └── main.ts             # Main entry point and app lifecycle
-│   ├── preload/
-│   │   └── preload.ts          # Exposes the conveyor bridge, sandbox-compatible
-│   └── utils.ts                # Shared helpers
-├── resources/
-│   └── build/                  # App icons and macOS entitlements
-├── electron-builder.yml        # Packaging config
-└── electron.vite.config.ts     # Build config for main, preload and renderer
-```
-
-<br />
-
-## Contributing
-
-Contributions are welcome! Feel free to submit a Pull Request.
+MIT license; see [LICENSE](LICENSE) for the retained copyright and permission notice.

@@ -1,0 +1,2 @@
+# Migration checksums depend on exact bytes; keep them stable across operating systems.
+drizzle/** text eol=lf

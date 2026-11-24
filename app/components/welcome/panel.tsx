@@ -6,7 +6,7 @@ import type { StackEntry } from './stack'
 
 /** The right-hand reading pane for one stack entry. */
 export function Panel({ entry }: { entry: StackEntry }) {
-  const Icon = entry.icon
+  const { icon: Icon, docs } = entry
 
   return (
     <div className="mx-auto max-w-3xl px-8 py-10">
@@ -42,13 +42,15 @@ export function Panel({ entry }: { entry: StackEntry }) {
         ))}
       </div>
 
-      <button
-        onClick={() => conveyor.web.openUrl(entry.docs)}
-        className="mt-6 inline-flex items-center gap-1.5 text-[13px] text-muted-foreground transition-colors hover:text-brand"
-      >
-        Documentation
-        <ArrowUpRight className="size-3.5" />
-      </button>
+      {docs && (
+        <button
+          onClick={() => conveyor.web.openUrl(docs)}
+          className="mt-6 inline-flex items-center gap-1.5 text-[13px] text-muted-foreground transition-colors hover:text-brand"
+        >
+          Documentation
+          <ArrowUpRight className="size-3.5" />
+        </button>
+      )}
     </div>
   )
 }

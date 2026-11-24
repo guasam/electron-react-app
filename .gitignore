@@ -6,3 +6,10 @@ out
 temp
 # TypeScript incremental build info
 *.tsbuildinfo
+.superpowers/
+test-results/
+playwright-report/
+coverage/
+*.sqlite
+*.sqlite-wal
+*.sqlite-shm

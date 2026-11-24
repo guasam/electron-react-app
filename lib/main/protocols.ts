@@ -1,18 +1,41 @@
 import { protocol, net } from 'electron'
-import { join } from 'path'
-import { pathToFileURL } from 'url'
+import { resolve, relative, isAbsolute } from 'node:path'
+import { realpath } from 'node:fs/promises'
+import { pathToFileURL } from 'node:url'
 
-export function registerResourcesProtocol() {
-  protocol.handle('res', async (request) => {
+export function registerAppSchemes() {
+  protocol.registerSchemesAsPrivileged([
+    { scheme: 'app', privileges: { standard: true, secure: true, supportFetchAPI: true } },
+  ])
+}
+export function registerAppProtocols(rendererRoot: string, resourceRoot: string) {
+  const serve = async (root: string, path: string) => {
+    try {
+      const base = await realpath(root),
+        target = await realpath(resolve(base, `.${path}`)),
+        tail = relative(base, target)
+      if (tail.startsWith('..') || isAbsolute(tail)) return new Response('Not found', { status: 404 })
+      return net.fetch(pathToFileURL(target).href)
+    } catch {
+      return new Response('Not found', { status: 404 })
+    }
+  }
+  protocol.handle('app', (request) => {
     try {
       const url = new URL(request.url)
-      // Combine hostname and pathname to get the full path
-      const fullPath = join(url.hostname, url.pathname.slice(1))
-      const filePath = join(__dirname, '../../resources', fullPath)
-      return net.fetch(pathToFileURL(filePath).toString())
-    } catch (error) {
-      console.error('Protocol error:', error)
-      return new Response('Resource not found', { status: 404 })
+      return url.hostname === 'starter'
+        ? serve(rendererRoot, decodeURIComponent(url.pathname))
+        : new Response('Not found', { status: 404 })
+    } catch {
+      return new Response('Not found', { status: 404 })
+    }
+  })
+  protocol.handle('res', (request) => {
+    try {
+      const url = new URL(request.url)
+      return serve(resourceRoot, `/${url.hostname}${decodeURIComponent(url.pathname)}`)
+    } catch {
+      return new Response('Not found', { status: 404 })
     }
   })
 }
